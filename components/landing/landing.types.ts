@@ -1,0 +1,36 @@
+export type Locale = "en" | "uz";
+
+export type LandingCopy = {
+  localeLabel: string;
+  localeHref: string;
+  nav: readonly (readonly [label: string, href: string])[];
+  navAction: string;
+  menu: string;
+  eyebrow: string;
+  titleIntro: string;
+  title: string;
+  previewNote: string;
+  description: string;
+  primary: string;
+  secondary: string;
+  proof: readonly (readonly [value: string, label: string])[];
+  libraryEyebrow: string;
+  libraryTitle: string;
+  libraryDescription: string;
+  items: readonly (readonly [title: string, description: string])[];
+  playgroundEyebrow: string;
+  playgroundTitle: string;
+  playgroundDescription: string;
+  principlesEyebrow: string;
+  principlesTitle: string;
+  principlesDescription: string;
+  principles: readonly (readonly [title: string, description: string])[];
+  codeLabel: string;
+  codeDescription: string;
+  details: readonly string[];
+  ctaEyebrow: string;
+  ctaTitle: string;
+  ctaDescription: string;
+  ctaAction: string;
+  footer: string;
+};

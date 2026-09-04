@@ -1,0 +1,172 @@
+@import url("https://rsms.me/inter/inter.css");
+@import "tailwindcss";
+
+:root {
+  --page: #ffffff;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+@theme inline {
+  --font-sans: "InterVariable", "Inter", sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --color-brand-50: #f0f7fd;
+  --color-brand-100: #dceeff;
+  --color-brand-400: #53a9ed;
+  --color-brand-500: #0072ce;
+  --color-brand-600: #005da8;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+  background: var(--page);
+}
+
+body {
+  min-width: 320px;
+  background: var(--page);
+  color: var(--color-zinc-950);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-optical-sizing: auto;
+}
+
+::selection {
+  background: var(--color-brand-100);
+  color: var(--color-zinc-950);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 4px;
+}
+
+.site-header {
+  isolation: isolate;
+}
+
+.site-header::before {
+  position: absolute;
+  inset: 0 0 8px;
+  z-index: -1;
+  content: "";
+  border-bottom: 1px solid rgb(9 9 11 / 0.08);
+  background: rgb(255 255 255 / 0.92);
+  box-shadow: 0 4px 24px rgb(9 9 11 / 0.035);
+  backdrop-filter: blur(16px);
+  opacity: 0;
+  transition: opacity 240ms var(--ease-out);
+}
+
+.site-header[data-scrolled="true"]::before {
+  opacity: 1;
+}
+
+.site-header-content {
+  transition: transform 240ms var(--ease-out);
+}
+
+.site-header[data-scrolled="true"] .site-header-content {
+  transform: translateY(-4px);
+}
+
+.playground-canvas {
+  background-color: #fafcfe;
+  background-image: radial-gradient(circle at 50% 55%, rgb(0 114 206 / 0.08), transparent 55%);
+}
+
+.playground-canvas::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background-image: radial-gradient(rgb(0 66 120 / 0.15) 0.7px, transparent 0.7px);
+  background-size: 20px 20px;
+  mask-image: radial-gradient(ellipse at center, black, transparent 75%);
+}
+
+.marquee-viewport {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+}
+
+.marquee-track {
+  animation: badge-scroll 40s linear infinite;
+}
+
+.animation-marquee[data-paused="true"] .marquee-track,
+.animation-marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .animation-marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+/* Keyboard users get a stationary, unclipped set of the same controls. */
+.animation-marquee:has(:focus-visible) .marquee-viewport {
+  overflow-x: auto;
+  mask-image: none;
+}
+
+.animation-marquee:has(:focus-visible) .marquee-track {
+  animation: none;
+}
+
+.animation-marquee:has(:focus-visible) [data-duplicate] {
+  display: none;
+}
+
+@keyframes badge-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility paper-grid {
+  background-image:
+    linear-gradient(to right, rgb(24 24 27 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(24 24 27 / 0.045) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+@utility pressable {
+  transition: transform 160ms var(--ease-out);
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .pressable,
+  .site-header-content,
+  .site-header::before {
+    transition: none;
+  }
+
+  .pressable:active {
+    transform: none;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+
+  .marquee-viewport {
+    overflow-x: auto;
+    mask-image: none;
+  }
+
+  .animation-marquee [data-duplicate],
+  .marquee-playback {
+    display: none;
+  }
+}

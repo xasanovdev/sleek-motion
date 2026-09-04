@@ -1,0 +1,56 @@
+import type { LocalizedPlaygroundCopy } from "./playground.types";
+
+export const playgroundCopy: LocalizedPlaygroundCopy = {
+  en: {
+    preview: "Live preview",
+    chooseAnimation: "Choose an animation",
+    pauseMotion: "Pause animation badges",
+    resumeMotion: "Resume animation badges",
+    interact: "Made to be played with. Try the controls.",
+    motionMode: "Motion for React",
+    reducedMode: "Reduced motion enabled",
+    tabs: { fade: "Fade", swap: "Content swap", collapse: "Collapse" },
+    replay: "Replay",
+    hide: "Hide message",
+    show: "Show message",
+    hidden: "The message is hidden",
+    fadeTitle: "Changes saved",
+    fadeBody: "Your animation tokens are now in sync.",
+    collapseTitle: "What ships with every animation?",
+    collapseBody:
+      "Typed source, reduced-motion behavior, real usage guidance, and a focused example you can inspect before copying.",
+    previous: "Previous example",
+    next: "Next example",
+    examples: [
+      ["Spatial context", "Forward and backward motion keeps users oriented."],
+      ["Good defaults", "Short timings and strong easing make the response immediate."],
+      ["Easy to own", "Copy the source, then tune it for your product."],
+    ],
+  },
+  uz: {
+    preview: "Jonli namuna",
+    chooseAnimation: "Animatsiyani tanlang",
+    pauseMotion: "Badge harakatini to‘xtatish",
+    resumeMotion: "Badge harakatini davom ettirish",
+    interact: "Harakatni his qilish uchun tugmalarni sinang.",
+    motionMode: "Motion for React",
+    reducedMode: "Kamaytirilgan harakat yoqilgan",
+    tabs: { fade: "Fade", swap: "Content swap", collapse: "Collapse" },
+    replay: "Qayta ko‘rish",
+    hide: "Xabarni yashirish",
+    show: "Xabarni ko‘rsatish",
+    hidden: "Xabar yashirilgan",
+    fadeTitle: "O‘zgarishlar saqlandi",
+    fadeBody: "Animatsiya tokenlaringiz endi bir xil ishlaydi.",
+    collapseTitle: "Har bir animatsiya bilan nima keladi?",
+    collapseBody:
+      "Typed source, reduced-motion holati, real foydalanish tavsiyasi va ko‘chirishdan oldin sinab ko‘rish mumkin bo‘lgan aniq namuna.",
+    previous: "Oldingi namuna",
+    next: "Keyingi namuna",
+    examples: [
+      ["Fazoviy aniqlik", "Oldinga va orqaga harakat foydalanuvchini yo‘qotib qo‘ymaydi."],
+      ["Yaxshi defaultlar", "Qisqa vaqt va kuchli easing javobni darhol sezdiradi."],
+      ["O‘zingizniki qilish oson", "Source’ni ko‘chiring va mahsulotingizga moslang."],
+    ],
+  },
+};

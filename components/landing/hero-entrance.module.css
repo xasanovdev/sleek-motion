@@ -1,0 +1,91 @@
+.header {
+  animation: header-enter 700ms var(--ease-out) backwards;
+}
+
+.eyebrow,
+.titleIntro,
+.title,
+.description,
+.note {
+  animation: text-enter 900ms var(--ease-out) backwards;
+}
+
+.eyebrow {
+  animation-duration: 650ms;
+}
+
+.titleIntro {
+  animation-delay: 80ms;
+}
+
+.title {
+  animation-delay: 160ms;
+}
+
+.description {
+  animation-delay: 240ms;
+}
+
+.hero [data-playground-part="selector"] {
+  animation: surface-enter 850ms var(--ease-out) 320ms backwards;
+}
+
+.hero [data-playground-part="panel"] {
+  animation: surface-enter 1000ms var(--ease-out) 400ms backwards;
+}
+
+.note {
+  animation-delay: 480ms;
+}
+
+/* The outer header enters; the inner container keeps its sticky transition. */
+@keyframes header-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes text-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* The large preview stays sharp: blur is reserved for the small text layers. */
+@keyframes surface-enter {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header,
+  .eyebrow,
+  .titleIntro,
+  .title,
+  .description,
+  .note,
+  .hero [data-playground-part] {
+    animation: none;
+  }
+}
