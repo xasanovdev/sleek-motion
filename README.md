@@ -1,5 +1,9 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Animation components
+
+Reusable components live in `registry/animations`, grouped by presence, content, layout, feedback, loading and viewport. Overlay motion recipes live in `registry/recipes/overlays`. See [the registry guide](registry/README.md) for the catalog, APIs, copy dependencies and verification commands.
+
 ## Landing playground
 
 - `/` is the English landing; `/uz` is the Uzbek landing.
