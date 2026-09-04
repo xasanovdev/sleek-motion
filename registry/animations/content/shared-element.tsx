@@ -11,11 +11,12 @@ export const sharedElementTransition = layoutTransition;
 export function SharedElement<T extends AnimationTag = "div">({
   layoutId,
   transition = sharedElementTransition,
-  duration: _duration,
-  delay: _delay,
   reducedMotion,
   ...props
-}: AnimationProps<T, { layoutId: string; transition?: Transition }>) {
+}: Omit<
+  AnimationProps<T, { layoutId: string; transition?: Transition }>,
+  "duration" | "delay"
+>) {
   const reduce = useMotionPreference(reducedMotion);
   return (
     <MotionSurface

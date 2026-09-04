@@ -1,20 +1,28 @@
 "use client";
 
+import { MotionSurface } from "../../internal/motion-surface";
 import type { AnimationProps, AnimationTag } from "../../internal/types";
-import { SharedElement, sharedElementTransition } from "./shared-element";
+import { useMotionPreference } from "../../internal/use-motion-preference";
+import { layoutTransition } from "../../motion-tokens";
 
-export const sharedIndicatorTransition = sharedElementTransition;
-/** Decorative only. Render inside the active tab/option and position with consumer styles. */
+export const sharedIndicatorTransition = layoutTransition;
+/** Decorative only; position inside the active option. Scope IDs with LayoutGroup. */
 export function SharedIndicator<T extends AnimationTag = "span">({
   as,
+  layoutId,
+  reducedMotion,
+  style,
   ...props
-}: AnimationProps<T, { layoutId: string }>) {
+}: Omit<AnimationProps<T, { layoutId: string }>, "duration" | "delay">) {
+  const reduce = useMotionPreference(reducedMotion);
   return (
-    <SharedElement
+    <MotionSurface
       {...props}
       as={as ?? "span"}
+      layoutId={reduce ? undefined : layoutId}
+      transition={sharedIndicatorTransition}
       aria-hidden="true"
-      style={{ pointerEvents: "none", ...props.style }}
+      style={{ ...style, pointerEvents: "none" }}
     />
   );
 }

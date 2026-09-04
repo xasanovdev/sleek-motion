@@ -10,16 +10,17 @@ export const layoutShiftTransition = layoutTransition;
 export function LayoutShift<T extends AnimationTag = "div">({
   layout = "position",
   transition = layoutShiftTransition,
-  duration: _duration,
-  delay: _delay,
   reducedMotion,
   ...props
-}: AnimationProps<
-  T,
-  {
-    layout?: true | "position" | "size" | "preserve-aspect";
-    transition?: Transition;
-  }
+}: Omit<
+  AnimationProps<
+    T,
+    {
+      layout?: true | "position" | "size" | "preserve-aspect";
+      transition?: Transition;
+    }
+  >,
+  "duration" | "delay"
 >) {
   const reduce = useMotionPreference(reducedMotion);
   return (

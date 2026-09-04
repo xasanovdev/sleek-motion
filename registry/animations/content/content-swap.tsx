@@ -4,6 +4,7 @@ import { AnimatePresence, type AnimatePresenceProps } from "motion/react";
 import type { Key } from "react";
 import { MotionSurface } from "../../internal/motion-surface";
 import type { AnimationProps, AnimationTag } from "../../internal/types";
+import { useMotionPreference } from "../../internal/use-motion-preference";
 import { tween } from "../../motion-tokens";
 import { fadeVariants } from "../presence/fade";
 
@@ -20,10 +21,11 @@ export function ContentSwap<T extends AnimationTag = "div">({
   initial = false,
   duration,
   delay,
-  reducedMotion: _reducedMotion,
+  reducedMotion,
   onExitComplete,
   ...props
 }: AnimationProps<T, ContentSwapOptions>) {
+  const reduce = useMotionPreference(reducedMotion);
   return (
     <AnimatePresence
       initial={initial}
@@ -37,7 +39,10 @@ export function ContentSwap<T extends AnimationTag = "div">({
         initial="hidden"
         animate="visible"
         exit="hidden"
-        transition={tween(duration, delay)}
+        transition={tween(
+          reduce ? Math.min(duration ?? 0.2, 0.16) : duration,
+          reduce ? 0 : delay,
+        )}
       />
     </AnimatePresence>
   );
