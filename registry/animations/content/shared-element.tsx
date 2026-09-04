@@ -9,8 +9,20 @@ import { layoutTransition } from "../../motion-tokens";
 export const sharedElementTransition = layoutTransition;
 /** Scope independent instances with Motion's LayoutGroup id. */
 export function SharedElement<T extends AnimationTag = "div">({
-  layoutId, transition = sharedElementTransition, duration: _duration, delay: _delay, reducedMotion, ...props
+  layoutId,
+  transition = sharedElementTransition,
+  duration: _duration,
+  delay: _delay,
+  reducedMotion,
+  ...props
 }: AnimationProps<T, { layoutId: string; transition?: Transition }>) {
   const reduce = useMotionPreference(reducedMotion);
-  return <MotionSurface {...props} layoutId={reduce ? undefined : layoutId} layout={!reduce} transition={transition} />;
+  return (
+    <MotionSurface
+      {...props}
+      layoutId={reduce ? undefined : layoutId}
+      layout={!reduce}
+      transition={transition}
+    />
+  );
 }

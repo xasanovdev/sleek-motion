@@ -8,8 +8,25 @@ import { layoutTransition } from "../../motion-tokens";
 
 export const layoutShiftTransition = layoutTransition;
 export function LayoutShift<T extends AnimationTag = "div">({
-  layout = "position", transition = layoutShiftTransition, duration: _duration, delay: _delay, reducedMotion, ...props
-}: AnimationProps<T, { layout?: true | "position" | "size" | "preserve-aspect"; transition?: Transition }>) {
+  layout = "position",
+  transition = layoutShiftTransition,
+  duration: _duration,
+  delay: _delay,
+  reducedMotion,
+  ...props
+}: AnimationProps<
+  T,
+  {
+    layout?: true | "position" | "size" | "preserve-aspect";
+    transition?: Transition;
+  }
+>) {
   const reduce = useMotionPreference(reducedMotion);
-  return <MotionSurface {...props} layout={reduce ? false : layout} transition={transition} />;
+  return (
+    <MotionSurface
+      {...props}
+      layout={reduce ? false : layout}
+      transition={transition}
+    />
+  );
 }

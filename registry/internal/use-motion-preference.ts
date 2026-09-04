@@ -13,5 +13,7 @@ const serverSnapshot = () => true;
 
 /** A stable SSR fallback and live updates if the OS preference changes. */
 export function useMotionPreference(reducedMotion = false) {
-  return useSyncExternalStore(subscribe, snapshot, serverSnapshot) || reducedMotion;
+  return (
+    useSyncExternalStore(subscribe, snapshot, serverSnapshot) || reducedMotion
+  );
 }

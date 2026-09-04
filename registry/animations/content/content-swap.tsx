@@ -15,10 +15,30 @@ export type ContentSwapOptions = {
   onExitComplete?: () => void;
 };
 export function ContentSwap<T extends AnimationTag = "div">({
-  contentKey, mode = "wait", initial = false, duration, delay, reducedMotion: _reducedMotion, onExitComplete, ...props
+  contentKey,
+  mode = "wait",
+  initial = false,
+  duration,
+  delay,
+  reducedMotion: _reducedMotion,
+  onExitComplete,
+  ...props
 }: AnimationProps<T, ContentSwapOptions>) {
-  return <AnimatePresence initial={initial} mode={mode} onExitComplete={onExitComplete}>
-    <MotionSurface {...props} key={contentKey} variants={contentSwapVariants}
-      initial="hidden" animate="visible" exit="hidden" transition={tween(duration, delay)} />
-  </AnimatePresence>;
+  return (
+    <AnimatePresence
+      initial={initial}
+      mode={mode}
+      onExitComplete={onExitComplete}
+    >
+      <MotionSurface
+        {...props}
+        key={contentKey}
+        variants={contentSwapVariants}
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+        transition={tween(duration, delay)}
+      />
+    </AnimatePresence>
+  );
 }

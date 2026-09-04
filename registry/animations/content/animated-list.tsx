@@ -18,20 +18,50 @@ export type AnimatedListOptions<Item> = {
   initial?: boolean;
 };
 export function AnimatedList<Item, T extends AnimationTag = "ul">({
-  as, items, getKey, renderItem, itemAs = "li", itemClassName, initial = false,
-  duration, delay, reducedMotion, style, ...props
+  as,
+  items,
+  getKey,
+  renderItem,
+  itemAs = "li",
+  itemClassName,
+  initial = false,
+  duration,
+  delay,
+  reducedMotion,
+  style,
+  ...props
 }: AnimationProps<T, AnimatedListOptions<Item>>) {
   const id = useId();
   const reduce = useMotionPreference(reducedMotion);
-  return <LayoutGroup id={id}>
-    <MotionSurface {...props} as={as ?? "ul"} style={{ position: "relative", ...style }}>
-      <AnimatePresence initial={initial} mode="popLayout">
-        {items.map((item, index) => <MotionSurface key={getKey(item)} as={itemAs} className={itemClassName}
-          layout={reduce ? false : "position"} custom={{ reducedMotion: reduce }} variants={animatedListVariants}
-          initial="hidden" animate="visible" exit="hidden" transition={{ ...tween(duration, delay), layout: layoutTransition }}>
-          {renderItem(item, index)}
-        </MotionSurface>)}
-      </AnimatePresence>
-    </MotionSurface>
-  </LayoutGroup>;
+  return (
+    <LayoutGroup id={id}>
+      <MotionSurface
+        {...props}
+        as={as ?? "ul"}
+        style={{ position: "relative", ...style }}
+      >
+        <AnimatePresence initial={initial} mode="popLayout">
+          {items.map((item, index) => (
+            <MotionSurface
+              key={getKey(item)}
+              as={itemAs}
+              className={itemClassName}
+              layout={reduce ? false : "position"}
+              custom={{ reducedMotion: reduce }}
+              variants={animatedListVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              transition={{
+                ...tween(duration, delay),
+                layout: layoutTransition,
+              }}
+            >
+              {renderItem(item, index)}
+            </MotionSurface>
+          ))}
+        </AnimatePresence>
+      </MotionSurface>
+    </LayoutGroup>
+  );
 }

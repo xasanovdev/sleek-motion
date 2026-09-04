@@ -10,9 +10,20 @@ export const motionTokens = {
 } as const;
 
 export const layoutTransition = {
-  type: "spring", stiffness: 500, damping: 40, mass: 1,
+  type: "spring",
+  stiffness: 500,
+  damping: 40,
+  mass: 1,
 } satisfies Transition;
 
-export function tween(duration: number = motionTokens.duration.normal, delay = 0): Transition {
-  return { type: "tween", duration: Math.max(0, duration), delay: Math.max(0, delay), ease: motionTokens.easeOut };
+export function tween(
+  duration: number = motionTokens.duration.normal,
+  delay = 0,
+): Transition {
+  return {
+    type: "tween",
+    duration: Math.max(0, duration),
+    delay: Math.max(0, delay),
+    ease: motionTokens.easeOut,
+  };
 }

@@ -11,15 +11,35 @@ export function createPresence<Options extends object>(
   getOptions: (props: Options) => { custom: object; rest: object },
 ) {
   return function PresenceAnimation<T extends AnimationTag = "div">({
-    show = true, initial = false, duration, delay, reducedMotion, onExitComplete, ...props
+    show = true,
+    initial = false,
+    duration,
+    delay,
+    reducedMotion,
+    onExitComplete,
+    ...props
   }: AnimationProps<T, PresenceOptions & Options>) {
     const reduce = useMotionPreference(reducedMotion);
     const { custom, rest } = getOptions(props as Options);
     const data = { ...custom, reducedMotion: reduce };
     return (
-      <AnimatePresence initial={initial} custom={data} onExitComplete={onExitComplete}>
-        {show && <MotionSurface {...rest} key="content" custom={data} variants={variants}
-          initial="hidden" animate="visible" exit="hidden" transition={tween(duration, delay)} />}
+      <AnimatePresence
+        initial={initial}
+        custom={data}
+        onExitComplete={onExitComplete}
+      >
+        {show && (
+          <MotionSurface
+            {...rest}
+            key="content"
+            custom={data}
+            variants={variants}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            transition={tween(duration, delay)}
+          />
+        )}
       </AnimatePresence>
     );
   };
