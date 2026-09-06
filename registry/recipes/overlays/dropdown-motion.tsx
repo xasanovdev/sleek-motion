@@ -19,12 +19,12 @@ export function DropdownMotion<T extends AnimationTag = "div">(
   return (
     <ScaleFade<T>
       duration={0.16}
+      {...props}
       style={{
         ...props.style,
         transformOrigin:
           props.style?.transformOrigin ?? "var(--transform-origin, top)",
       }}
-      {...props}
     />
   );
 }

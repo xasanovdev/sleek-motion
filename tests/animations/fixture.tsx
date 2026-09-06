@@ -1,6 +1,7 @@
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { useRef, useState } from "react";
 import { AnimatePresence } from "motion/react";
+import { V1Fixture } from "./v1-fixture";
 import {
   AnimatedList,
   AutoHeight,
@@ -167,6 +168,7 @@ export function Fixture() {
       <AnimatePresence>
         {show && <div key="outside">External presence</div>}
       </AnimatePresence>
+      <V1Fixture />
     </main>
   );
 }

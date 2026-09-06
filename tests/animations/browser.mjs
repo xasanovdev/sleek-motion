@@ -5,6 +5,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { checkV1 } from "./v1-browser.mjs";
 
 // Resolve an installed Playwright, or use the host's existing bundled runtime.
 const { chromium } = await import(
@@ -243,9 +244,10 @@ try {
     "false",
     "Offscreen loops pause",
   );
+  await checkV1(page);
   assert.deepEqual(errors, [], "No browser or React errors");
   console.log(
-    "PASS: SSR/hydration, refs, semantic tags, enter/exit, rapid toggles/swaps, dynamic height, inert content, RTL, lists, keyboard/pointer, progress, live reduced motion, viewport and loop pausing.",
+    "PASS: SSR/hydration, refs, semantic tags, enter/exit, rapid toggles/swaps, dynamic height, inert content, RTL, lists, keyboard/pointer, progress, reduced motion, viewport, loop pausing, sequential steps, async/icon/copy buttons, clipboard races and overlay origins.",
   );
 } finally {
   await browser?.close();

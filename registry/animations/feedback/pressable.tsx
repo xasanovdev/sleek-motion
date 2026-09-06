@@ -39,7 +39,7 @@ export function Pressable({
       variants={pressableVariants}
       custom={{ scale }}
       animate={pressed && !disabled && !reduce ? "pressed" : "idle"}
-      transition={tween(reduce ? 0 : duration)}
+      transition={tween(reduce ? 0 : pressed ? duration : Math.min(duration, 0.1))}
       onPointerDown={(event) => {
         onPointerDown?.(event);
         if (!event.defaultPrevented && event.button === 0 && !disabled)
