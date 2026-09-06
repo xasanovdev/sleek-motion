@@ -94,3 +94,15 @@ motion guide and **Copy prompt** action. **Read the prompt** reveals the full
 integration text below the preview; guide and controls stack on smaller screens.
 See `plans/motion-audit.md` for review findings,
 accepted motion tradeoffs and validation limits.
+
+## ThreadPreview study
+
+`/experiments/thread-preview` is a portfolio prototype for reviewing one expressive
+interaction before adding it to the registry. Hover or focus **interfaces** to
+reveal the project, tap to pin it, and use Escape or the close control to dismiss.
+The preview uses a local screenshot of Sleekmation. The page is marked `noindex`
+and is not included in the animation catalog.
+
+After a production build, run `node tests/thread-preview-browser.mjs` for the
+focused interaction and responsive checks. Add `--capture-project` only when you
+want to refresh its bundled screenshot from the local production homepage.
