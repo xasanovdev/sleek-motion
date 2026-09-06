@@ -73,7 +73,11 @@ body {
 
 .playground-canvas {
   background-color: #fafcfe;
-  background-image: radial-gradient(circle at 50% 55%, rgb(0 114 206 / 0.08), transparent 55%);
+  background-image: radial-gradient(
+    circle at 50% 55%,
+    rgb(0 114 206 / 0.08),
+    transparent 55%
+  );
 }
 
 .playground-canvas::before {
@@ -81,14 +85,23 @@ body {
   inset: 0;
   content: "";
   pointer-events: none;
-  background-image: radial-gradient(rgb(0 66 120 / 0.15) 0.7px, transparent 0.7px);
+  background-image: radial-gradient(
+    rgb(0 66 120 / 0.15) 0.7px,
+    transparent 0.7px
+  );
   background-size: 20px 20px;
   mask-image: radial-gradient(ellipse at center, black, transparent 75%);
 }
 
 .marquee-viewport {
   overflow: hidden;
-  mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 3%,
+    black 97%,
+    transparent
+  );
 }
 
 .marquee-track {
@@ -136,9 +149,7 @@ body {
 @utility pressable {
   transition: transform 160ms var(--ease-out);
 
-  &:active {
-    transform: scale(0.97);
-  }
+  /* Pointer-only press feedback is provided by the registry Pressable component. */
 }
 
 @media (prefers-reduced-motion: reduce) {

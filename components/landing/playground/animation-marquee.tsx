@@ -53,7 +53,6 @@ export function AnimationMarquee({
                     <button
                       key={`${repeat}-${id}`}
                       type="button"
-                      aria-hidden={duplicate || undefined}
                       tabIndex={duplicate ? -1 : 0}
                       data-duplicate={duplicate || undefined}
                       aria-pressed={activeDemo === id}

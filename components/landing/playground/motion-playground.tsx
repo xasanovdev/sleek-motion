@@ -1,7 +1,8 @@
 "use client";
 
 import clsx from "clsx";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useReducedMotion } from "motion/react";
+import { ContentSwap } from "@/registry/animations/content/content-swap";
 import { useId, useState } from "react";
 
 import type { Locale } from "../landing.types";
@@ -13,7 +14,6 @@ import { playgroundCopy } from "./playground.copy";
 import { PlaygroundHeader } from "./playground-header";
 import type { Demo } from "./playground.types";
 
-const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 
 export function MotionPlayground({
   className,
@@ -71,19 +71,7 @@ export function MotionPlayground({
             </span>
           </div>
           <div className="relative grid flex-1 place-items-center py-10">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={`${demo}-${replayKey}`}
-                initial={{
-                  opacity: 0,
-                  transform: reduceMotion ? "none" : "translateY(8px)",
-                }}
-                animate={{ opacity: 1, transform: "none" }}
-                exit={{
-                  opacity: 0,
-                  transform: reduceMotion ? "none" : "translateY(-8px)",
-                }}
-                transition={{ duration: 0.18, ease: EASE_OUT }}
+            <ContentSwap contentKey={`${demo}-${replayKey}`} mode="sync" duration={0.16} reducedMotion={reduceMotion} style={{ gridArea: "1 / 1" }}
                 className="w-full max-w-sm"
               >
                 {demo === "fade" && (
@@ -95,8 +83,7 @@ export function MotionPlayground({
                 {demo === "collapse" && (
                   <CollapseDemo copy={copy} reduceMotion={reduceMotion} />
                 )}
-              </motion.div>
-            </AnimatePresence>
+            </ContentSwap>
           </div>
           <p className="relative text-center text-sm/6 text-zinc-500">
             {copy.interact}

@@ -426,6 +426,46 @@ Requirements:
 - Hidden kept-mounted content must not remain keyboard-focusable or exposed as
   visible content to assistive technology.
 
+### 10.5 Sequential content
+
+`SequentialContent` accepts `step={stepIndex}` and otherwise shares the
+directional content swap API. Increasing/decreasing a finite numeric index
+infers forward/back travel, including skipped steps; `dir="rtl"` reverses
+horizontal travel. Same-step updates preserve content identity. The consumer
+owns navigation, validation, progress labels, announcements and focus.
+
+### 10.6 Async button
+
+`AsyncButton` uses controlled `status="idle" | "loading" | "success" | "error"`.
+Idle content comes from `children`; `loadingContent`, `successContent` and
+`errorContent` customize the other states. It composes `Pressable` with a short
+in-place crossfade. While loading it remains focusable, exposes busy/disabled
+semantics, and prevents duplicate click handlers and button-triggered submits.
+The consumer owns requests, resetting status, and other form submission paths.
+
+### 10.7 Icon swap button
+
+`IconSwapButton` accepts `iconKey`, icon children and a required `aria-label`.
+It preserves the button node and focus while crossfading decorative icon states.
+The consumer owns the click behavior and `aria-pressed` when it is a toggle.
+
+### 10.8 Copy button
+
+`CopyButton` accepts `text`, copies from the activation gesture, and owns
+loading/success/error feedback. Success is shown only after the Clipboard API
+resolves; failures remain visible for retry. `resetAfter` defaults to two seconds
+and resets success. Pending duplicate clicks are ignored. Source changes and
+unmounts invalidate old completions and timers, but cannot cancel a clipboard
+write already in progress. `onCopySuccess` and `onCopyError` report outcomes.
+It always renders a native `type="button"` and requires a supported secure context.
+
+### 10.9 Loading overlay
+
+`LoadingOverlay` is an overlay recipe composing `Fade`, controlled by `loading`.
+It defaults to a labeled, polite status region and unmounts after exit. The
+consumer owns positioning, blocking the busy region, busy semantics on that
+region, and focus handling. It does not implement modal focus or scroll locking.
+
 ## 11. Motion quality gate
 
 Every catalog entry must pass all four questions:
@@ -490,7 +530,7 @@ Every detail page provides:
 - a live preview;
 - controls for all meaningful states;
 - a restart action for deterministic previews;
-- playback speed controls;
+- playback speed controls for timed motion; native spring/scroll behavior remains unscaled;
 - reduced-motion preview;
 - RTL preview when direction matters;
 - **When to use** guidance;
@@ -503,7 +543,9 @@ Every detail page provides:
 - **Copy component**;
 - **Copy required files**;
 - dependency list;
-- exact GitHub source link;
+- exact GitHub file references on the repository's main branch;
+- **Copy prompt** with a short agentic integration guide, complete source closure and working example;
+- manual prompt selection and retry when clipboard/network access fails;
 - mobile interaction preview where relevant.
 
 Suggested routes:
@@ -563,7 +605,7 @@ An animation is complete only when:
 6. Keyboard, pointer, and touch behavior remain accessible.
 7. The source is independently copyable with its required files listed.
 8. The live example demonstrates a real UI use case.
-9. GitHub links point to the exact implementation.
+9. GitHub links identify exact source paths. Embedded prompt snapshots are complete and authoritative.
 10. The animation passes the motion review quality gate.
 
 ## 16. Delivery phases
@@ -589,7 +631,7 @@ An animation is complete only when:
 - O‘zbek landing at `/uz`;
 - searchable animation catalog;
 - interactive detail pages;
-- code copying and GitHub links.
+- 39 interactive previews, complete prompt copying, file copying and GitHub references.
 
 ### Phase 4 — Stabilization
 
@@ -600,11 +642,8 @@ An animation is complete only when:
 
 ## 17. Remaining decisions
 
-These decisions are intentionally deferred until implementation planning:
+The repository is `xasanovdev/sleek-motion`; the showcase uses the existing white, ink and blue identity. Verification uses TypeScript, ESLint, independent Bun bundles and Playwright Chromium.
 
-- exact repository and GitHub organization name;
-- visual identity and showcase design direction;
-- hosting provider;
-- final test tools;
-- browser support matrix;
-- whether a public npm package is justified after V1.
+Still deferred: hosting/deployment, a broader browser/device support matrix, and an optional npm package. These do not block using the complete copied sources.
+
+The current showcase includes all 39 registry entries in seven categories. Its primary flow is preview → Copy prompt → integration by the user’s coding agent. Motion review evidence and explicit exceptions are recorded in `plans/motion-audit.md`.

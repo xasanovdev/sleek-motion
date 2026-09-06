@@ -1,51 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sleekmation
 
-## Animation components
+A copy-first collection of React animation primitives and UI motion recipes.
+The website uses Next.js, React, TypeScript and Bun. Copied components require
+only React 19 and Motion; their appearance belongs to the consuming application.
 
-Reusable components live in `registry/animations`, grouped by presence, content, layout, feedback, loading and viewport. Overlay motion recipes live in `registry/recipes/overlays`. See [the registry guide](registry/README.md) for the catalog, APIs, copy dependencies and verification commands.
+## Animation registry
+
+The foundation and V1 component families are implemented in `registry/animations`,
+grouped by presence, content, layout, feedback, loading and viewport. Overlay
+motion recipes live in `registry/recipes/overlays`.
+
+See the [registry guide](registry/README.md) for APIs, usage, copy dependencies and
+accessibility responsibilities, and the [product specification](SPECIFICATION.md)
+for scope and quality requirements. `/animations` provides search and category
+filters across seven categories and 39 interactive detail pages. Try a demo in a
+card or open its page, then use **Copy prompt** to copy an integration guide, GitHub
+references, a working example and all required source files. Direct component/file
+copying and API guidance remain available. The project does not ship a component npm
+package or installer CLI.
+
+## Development
+
+```sh
+bun install --frozen-lockfile
+bun run dev
+```
+
+Open [localhost:3000](http://localhost:3000). The English landing route lives in
+`app/(english)` and the Uzbek route in `app/(uzbek)/uz`. Set
+`NEXT_PUBLIC_SITE_URL` to the public site origin for production canonical and
+language-alternate metadata; the development fallback is localhost.
+
+## Verification
+
+```sh
+bun run test:install # Install Chromium once after dependencies
+bun run typecheck
+bun run lint
+bun run test:animations
+bun run test:copy
+bun run build
+bun run test:catalog # Requires the production build
+```
+
+The browser runner creates an isolated temporary fixture, verifies server
+rendering/hydration and interactive behavior, then cleans up. It requires local
+server and browser-launch permissions. See the registry guide for host-provided
+browser overrides. `bun run build --webpack` is also available when the execution
+environment cannot run Turbopack. Physical touch-device and visual motion checks
+remain separate from the automated suite.
+
+`registry/manifest.ts` identifies all 39 component entry files. The server-only
+source reader follows relative imports to collect complete file bundles. Copy
+tests build every bundle in isolation, type-check all 39 usage examples and check
+that each prompt includes the full source closure.
+Catalog tests start and stop a temporary production server and verify search,
+copying, controls, metadata and mobile layouts. Technical catalog pages are English.
 
 ## Landing playground
 
 - `/` is the English landing; `/uz` is the Uzbek landing.
-- The main screen contains one playground with Fade, Content swap, and Collapse demos.
-- Animation badges move right-to-left. Hover, keyboard focus, or the pause control stops the movement; reduced-motion preferences show stationary, horizontally scrollable choices.
-- The header gently fades down on initial load, then stays at the top and smoothly changes to a compact surface while scrolling. Reduced-motion preferences skip its entrance.
-- The hero has a one-time staggered entrance: text gently rises into focus, followed by the badges and playground. Reduced-motion preferences skip the entrance; scrolling, focus changes, and demo changes do not replay it.
-- The palette is white, black, and `#0072CE`. Landing sections and playground controls live in `components/landing`.
-- These are interactive previews, not published registry components. Copy code and GitHub source are still planned.
+- The landing previews use the actual `Fade`, `DirectionalContentSwap` and
+  `Collapse` registry components. Both languages link to the English catalog.
+- Animation badges pause on hover, keyboard focus or the pause control.
+  Reduced-motion preferences show stationary, horizontally scrollable choices.
+- The header and hero have restrained initial entrances with reduced-motion
+  support. The header becomes compact while scrolling.
+- The palette is white, black and `#0072CE`. Landing sections and controls live
+  in `components/landing`.
 
-## Getting Started
+## Prompt workflow
 
-First, run the development server:
+1. Open `/animations`, search by component name or motion term, and choose a category.
+2. Use **Try animation** for an in-card demo, or open **Details** for controls and guidance.
+3. Use **Copy prompt**, then paste the result into your coding agent in the target project.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The agent is instructed to inspect the target UI, preserve its styles, save every
+included file, check React 19/Motion 13 compatibility, and verify accessibility.
+Prompts are static text endpoints at `/animations/<slug>/prompt`; source bundles
+are loaded on demand in catalog cards. On clipboard failure the full prompt is
+available for manual selection, and failed requests can be retried.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+GitHub links are references, not runtime dependencies. Embedded snapshots are
+complete and authoritative, and include the MIT notice at `registry/LICENSE`.
+Source links point to the corresponding files on GitHub's `main` branch.
+Deploying the site is a separate operation.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# sleek-motion
+The shared-layout demos use their native spring timing; scroll progress follows
+the real position without a speed control. Other timed examples expose playback
+speed. Direction-sensitive examples offer RTL, and every example offers reduced
+motion and a compact preview. Detail pages pair the live example with a short
+motion guide and **Copy prompt** action. **Read the prompt** reveals the full
+integration text below the preview; guide and controls stack on smaller screens.
+See `plans/motion-audit.md` for review findings,
+accepted motion tradeoffs and validation limits.

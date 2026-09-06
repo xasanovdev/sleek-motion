@@ -5,29 +5,29 @@ export const landingCopy: Record<Locale, LandingCopy> = {
     localeLabel: "O‘zbek",
     localeHref: "/uz",
     nav: [
-      ["Library", "#library"],
+      ["Library", "/animations"],
       ["Principles", "#principles"],
       ["Playground", "#playground"],
     ],
-    navAction: "Try playground",
+    navAction: "Browse library",
     menu: "Open navigation",
     eyebrow: "Small details. Better interfaces.",
     titleIntro: "A little motion.",
     title: "A better experience.",
     previewNote: "interactive previews. A growing library of purposeful motion.",
     description:
-      "Thoughtful animations for everyday interfaces. Explore the motion, feel the details, and make it your own.",
+      "39 thoughtful animations for everyday interfaces. Try a preview, copy its prompt, and bring the motion into your project.",
     primary: "Explore animations",
     secondary: "See the principles",
     proof: [
-      ["6", "foundation primitives"],
+      ["39", "ready-to-use animations"],
       ["2", "runtime dependencies"],
       ["0", "required providers"],
     ],
-    libraryEyebrow: "The foundation · In development",
+    libraryEyebrow: "The foundation · Ready to copy",
     libraryTitle: "Small primitives for real interface work",
     libraryDescription:
-      "Six planned primitives, each solving one recurring motion problem. Try the first three interactive previews in the playground above.",
+      "Six primitives, each solving one recurring motion problem. Preview the real components, inspect every file, and copy them into your project.",
     items: [
       ["Fade", "Bring content in and out without inventing a spatial story."],
       ["Scale fade", "Give compact surfaces subtle depth without scaling from nothing."],
@@ -49,7 +49,7 @@ export const landingCopy: Record<Locale, LandingCopy> = {
       ["Fast where it matters", "Most interface responses settle in under 240ms."],
       ["Accessible by default", "Movement softens while useful opacity feedback remains."],
     ],
-    codeLabel: "A readable API · Planned",
+    codeLabel: "A readable API · Yours to shape",
     codeDescription:
       "Good defaults stay visible in the implementation. Nothing important is hidden behind a preset name.",
     details: [
@@ -61,37 +61,37 @@ export const landingCopy: Record<Locale, LandingCopy> = {
     ctaEyebrow: "Start with the foundation",
     ctaTitle: "Build motion you can still love after the hundredth use",
     ctaDescription:
-      "Try the first interactive previews. Copyable components and GitHub source are coming next.",
-    ctaAction: "Open the playground",
+      "Explore all 39 animations. Copy a complete prompt with an integration guide, GitHub references, a working example and every required source file.",
+    ctaAction: "Explore the library",
     footer: "Purposeful motion primitives for React.",
   },
   uz: {
     localeLabel: "English",
     localeHref: "/",
     nav: [
-      ["Kutubxona", "#library"],
+      ["Kutubxona", "/animations"],
       ["Prinsiplar", "#principles"],
       ["Sinov maydoni", "#playground"],
     ],
-    navAction: "Sinab ko‘rish",
+    navAction: "Kutubxonani ko‘rish",
     menu: "Navigatsiyani ochish",
     eyebrow: "Kichik detallar. Yaxshiroq interfeyslar.",
     titleIntro: "Biroz harakat.",
     title: "Yaxshiroq taassurot.",
     previewNote: "interaktiv namuna. Maqsadli animatsiyalar to‘plami kengaymoqda.",
     description:
-      "Kundalik interfeyslar uchun puxta animatsiyalar. Harakatni sinang, detallarni his qiling va o‘zingizga moslang.",
+      "Kundalik interfeyslar uchun 39 ta animatsiya. Namunasini sinang, promptini nusxalang va agent yordamida loyihangizga qo‘shing.",
     primary: "Animatsiyalarni ko‘rish",
     secondary: "Prinsiplarni ko‘rish",
     proof: [
-      ["6", "foundation primitive"],
+      ["39", "tayyor animatsiya"],
       ["2", "runtime dependency"],
       ["0", "majburiy provider"],
     ],
-    libraryEyebrow: "Foundation · Ishlab chiqilmoqda",
+    libraryEyebrow: "Foundation · Ko‘chirishga tayyor",
     libraryTitle: "Real interfeyslar uchun kichik primitivlar",
     libraryDescription:
-      "Rejadagi oltita primitivning har biri bitta motion muammosini yechadi. Dastlabki uchta interaktiv namunani yuqoridagi playground’da sinab ko‘ring.",
+      "Oltita primitivning har biri bitta motion muammosini yechadi. Haqiqiy komponentlarni sinang, fayllarni ko‘ring va loyihangizga ko‘chiring.",
     items: [
       ["Fade", "Yangi fazoviy ma’no o‘ylab topmasdan kontentni ko‘rsating va yashiring."],
       ["Scale fade", "Kichik surface’ga scale noldan boshlanmasdan yengil chuqurlik bering."],
@@ -113,7 +113,7 @@ export const landingCopy: Record<Locale, LandingCopy> = {
       ["Kerakli joyda tez", "Interfeys javoblarining ko‘pi 240ms ichida yakunlanadi."],
       ["Accessibility default", "Harakat yumshaydi, foydali opacity feedback esa qoladi."],
     ],
-    codeLabel: "Tushunarli API · Rejada",
+    codeLabel: "Tushunarli API · O‘zingizga moslang",
     codeDescription:
       "Yaxshi defaultlar implementation ichida ko‘rinib turadi. Muhim qarorlar preset nomi ortiga yashirilmaydi.",
     details: [
@@ -125,8 +125,8 @@ export const landingCopy: Record<Locale, LandingCopy> = {
     ctaEyebrow: "Foundation’dan boshlang",
     ctaTitle: "Yuzinchi ishlatishda ham yoqimli qoladigan motion yarating",
     ctaDescription:
-      "Dastlabki interaktiv namunalarni sinang. Ko‘chiriladigan komponentlar va GitHub source keyingi bosqichda qo‘shiladi.",
-    ctaAction: "Sinov maydonini ochish",
+      "39 ta animatsiyani sinab ko‘ring. Qo‘shish yo‘riqnomasi, GitHub havolalari, ishlaydigan namuna va kerakli fayllar bilan tayyor promptni nusxalang.",
+    ctaAction: "Kutubxonani ko‘rish",
     footer: "React uchun maqsadli motion primitivlari.",
   },
 };

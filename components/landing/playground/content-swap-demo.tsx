@@ -2,13 +2,12 @@
 
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/16/solid";
 import clsx from "clsx";
-import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
+
+import { DirectionalContentSwap } from "@/registry/animations/content/directional-content-swap";
 
 import { PlaygroundCard } from "./playground-card";
 import type { PlaygroundCopy } from "./playground.types";
-
-const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 
 export function ContentSwapDemo({
   className,
@@ -30,39 +29,21 @@ export function ContentSwapDemo({
     });
   }
 
-  const variants = {
-    enter: (customDirection: 1 | -1) => ({
-      opacity: 0,
-      transform: reduceMotion ? "none" : `translateX(${customDirection * 16}px)`,
-    }),
-    center: { opacity: 1, transform: "none" },
-    exit: (customDirection: 1 | -1) => ({
-      opacity: 0,
-      transform: reduceMotion ? "none" : `translateX(${customDirection * -16}px)`,
-    }),
-  };
-
   return (
     <PlaygroundCard className={clsx(className)}>
       <div className="flex min-h-48 items-center p-6 sm:p-8">
-        <AnimatePresence mode="wait" initial={false} custom={direction}>
-          <motion.div
-            key={index}
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.2, ease: EASE_OUT }}
-          >
-            <p className="text-xl font-semibold tracking-tight text-zinc-950">
-              {copy.examples[index][0]}
-            </p>
-            <p className="mt-2 text-base/7 text-pretty text-zinc-600">
-              {copy.examples[index][1]}
-            </p>
-          </motion.div>
-        </AnimatePresence>
+        <DirectionalContentSwap
+          contentKey={index}
+          direction={direction}
+          reducedMotion={reduceMotion}
+        >
+          <p className="text-xl font-semibold tracking-tight text-zinc-950">
+            {copy.examples[index][0]}
+          </p>
+          <p className="mt-2 text-base/7 text-pretty text-zinc-600">
+            {copy.examples[index][1]}
+          </p>
+        </DirectionalContentSwap>
       </div>
       <div className="flex items-center justify-between border-t border-zinc-950/10 p-3">
         <ArrowButton label={copy.previous} onClick={() => changeExample(-1)}>

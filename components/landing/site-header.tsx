@@ -64,7 +64,7 @@ export function SiteHeader({
             {copy.localeLabel}
           </Link>
           <div className="hidden lg:block">
-            <ButtonLink href="#playground" variant="primary" className="rounded-full">
+            <ButtonLink href="/animations" variant="primary" className="rounded-full">
               {copy.navAction}
               <ArrowUpRightIcon aria-hidden="true" className="size-4 shrink-0" />
             </ButtonLink>

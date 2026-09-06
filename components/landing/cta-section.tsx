@@ -26,7 +26,7 @@ export function CtaSection({
         />
         <div className="mt-8 text-center text-base/7 sm:text-sm/6">
           <ButtonLink
-            href="#playground"
+            href="/animations"
             variant="text"
             className="text-zinc-950 decoration-brand-400 decoration-2 hover:decoration-brand-600"
           >

@@ -2,8 +2,10 @@
 
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import clsx from "clsx";
-import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { motion } from "motion/react";
+import { useId, useState } from "react";
+
+import { Collapse } from "@/registry/animations/layout/collapse";
 
 import { PlaygroundCard } from "./playground-card";
 import type { PlaygroundCopy } from "./playground.types";
@@ -20,12 +22,14 @@ export function CollapseDemo({
   reduceMotion: boolean;
 }) {
   const [open, setOpen] = useState(true);
+  const panelId = useId();
 
   return (
     <PlaygroundCard className={clsx(className)}>
       <button
         type="button"
         aria-expanded={open}
+        aria-controls={panelId}
         onClick={() => setOpen((current) => !current)}
         className="flex w-full items-start justify-between gap-4 p-5 text-left outline-none focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-brand-500"
       >
@@ -33,32 +37,19 @@ export function CollapseDemo({
         <motion.span
           aria-hidden="true"
           animate={{
-            transform: open && !reduceMotion ? "rotate(180deg)" : "rotate(0deg)",
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
           }}
-          transition={{ duration: 0.2, ease: EASE_OUT }}
+          transition={{ duration: reduceMotion ? 0 : 0.2, ease: EASE_OUT }}
           className="shrink-0"
         >
           <ChevronDownIcon className="size-4 h-lh fill-zinc-500" />
         </motion.span>
       </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{
-              height: { duration: reduceMotion ? 0.12 : 0.24, ease: EASE_OUT },
-              opacity: { duration: 0.16, ease: EASE_OUT },
-            }}
-            className="overflow-clip"
-          >
-            <p className="border-t border-zinc-950/10 p-5 text-base/7 text-pretty text-zinc-600">
-              {copy.collapseBody}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Collapse id={panelId} open={open} reducedMotion={reduceMotion}>
+        <p className="border-t border-zinc-950/10 p-5 text-base/7 text-pretty text-zinc-600">
+          {copy.collapseBody}
+        </p>
+      </Collapse>
     </PlaygroundCard>
   );
 }
