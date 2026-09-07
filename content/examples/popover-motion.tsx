@@ -1,15 +1,20 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
-import { PopoverMotion } from "../../registry/recipes/overlays/popover-motion";
+import { Popover } from "@base-ui/react/popover";
+import { useRef, useState } from "react";
+import { motion } from "motion/react";
+import { tween } from "../../registry/motion-tokens";
+import { popoverMotionVariants } from "../../registry/recipes/overlays/popover-motion";
 
 export default function Example({ reducedMotion = false, speed = 1 }: { reducedMotion?: boolean; speed?: number } = {}) {
   const [open, setOpen] = useState(false);
-  const trigger = useRef<HTMLButtonElement>(null);
-  const root = useRef<HTMLDivElement>(null);
-  const id = useId();
-  function close() { trigger.current?.focus(); setOpen(false); }
-  useEffect(() => { if (!open) return; function outside(event: PointerEvent) { if (!root.current?.contains(event.target as Node)) setOpen(false); } document.addEventListener("pointerdown", outside); return () => document.removeEventListener("pointerdown", outside); }, [open]);
-  return <div ref={root} onKeyDown={(event) => { if (event.key === "Escape") { event.stopPropagation(); close(); } }}><button ref={trigger} type="button" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>Open popover</button>
-    <div style={{ minHeight: 200, marginTop: 12 }}><PopoverMotion duration={.2 / speed} id={id} show={open} reducedMotion={reducedMotion} style={{ transformOrigin: "left top", background: "white", padding: 20, borderRadius: 12, border: "1px solid #e4e4e7" }}><h3>Share this collection</h3><p>Anyone with your link can view it.</p><button type="button" onClick={close}>Close panel</button></PopoverMotion></div></div>;
+  const actions = useRef<Popover.Root.Actions | null>(null);
+  return <Popover.Root open={open} onOpenChange={setOpen} actionsRef={actions}>
+    <Popover.Trigger>Open popover</Popover.Trigger>
+    <Popover.Portal><Popover.Positioner sideOffset={8} align="start" style={{ zIndex: 100 }}>
+      <Popover.Popup className="ui-example-popup" render={<motion.div initial="hidden" animate={open ? "visible" : "hidden"} variants={popoverMotionVariants} custom={{ reducedMotion }} transition={tween(.2 / speed)} onAnimationComplete={() => { if (!open) actions.current?.unmount(); }} />} style={{ transformOrigin: "var(--transform-origin)", width: "min(300px, var(--available-width))", padding: 20, background: "white", borderRadius: 12, border: "1px solid #e4e4e7", boxShadow: "0 8px 30px #18181b1a" }}>
+        <Popover.Title>Share this collection</Popover.Title><Popover.Description>Anyone with your link can view it.</Popover.Description><Popover.Close>Close panel</Popover.Close>
+      </Popover.Popup>
+    </Popover.Positioner></Popover.Portal>
+  </Popover.Root>;
 }

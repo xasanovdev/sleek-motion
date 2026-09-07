@@ -19,6 +19,19 @@ references, a working example and all required source files. Direct component/fi
 copying and API guidance remain available. The project does not ship a component npm
 package or installer CLI.
 
+## Website UI foundation
+
+The website uses `@base-ui/react` for accessible controls and overlay behavior.
+Shared controls live in `components/ui`; landing and catalog navigation use the
+same Dialog-based mobile sheet. The catalog uses Accordion groups, Select,
+Switch, ToggleGroup and Collapsible rather than custom keyboard/dismissal logic.
+Overlay examples compose Base UI with the registry's motion and wait for exit
+animations before unmounting.
+
+The copied registry still depends only on React and Motion. Examples that use
+Base UI explicitly list that additional integration dependency in their prompt
+and usage guidance. Existing native links retain navigation semantics.
+
 ## Development
 
 ```sh

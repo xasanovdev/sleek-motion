@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+
 import clsx from "clsx";
 import { useState } from "react";
 
@@ -41,13 +43,13 @@ export function FadeDemo({
         )}
       </div>
       <div className="text-base/7 sm:text-sm/6">
-        <button
+        <Button
           type="button"
           onClick={() => setVisible((current) => !current)}
           className="pressable w-full rounded-xl bg-zinc-950/5 px-3 py-2.5 font-medium text-zinc-800 outline-none hover:bg-zinc-950/8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
         >
           {visible ? copy.hide : copy.show}
-        </button>
+        </Button>
       </div>
     </PlaygroundCard>
   );

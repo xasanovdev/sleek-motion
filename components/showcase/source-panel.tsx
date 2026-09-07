@@ -1,7 +1,10 @@
 "use client";
 
+import { ToggleGroup } from "@base-ui/react/toggle-group";
+import { Toggle } from "@base-ui/react/toggle";
+
 import { useState } from "react";
-import { CopyButton } from "@/registry/animations/feedback/copy-button";
+import { CopyButton } from "@/components/ui/motion-buttons";
 import type { RegistrySource } from "@/lib/registry-source";
 import { githubSourceUrl, repositoryUrl } from "@/registry/manifest";
 
@@ -25,11 +28,11 @@ export function SourcePanel({ source }: { source: RegistrySource }) {
       <p className="mt-3 text-xs/6 text-zinc-500">“Copy required files” includes the component and dependencies, separated by file-path comments. Save each section to its matching file.</p>
       <p aria-live="polite" className="min-h-6 text-xs/6 text-brand-600">{notice}</p>
       <div className="source-browser">
-        <div className="source-files" role="group" aria-label="Required files">
-          {source.files.map((item) => <button key={item.path} aria-pressed={item.path === file.path} onClick={() => setSelected(item.path)} title={item.path}>
+        <ToggleGroup className="source-files" orientation="vertical" aria-label="Required files" value={[file.path]} onValueChange={(values) => { if (values.length) setSelected(values[0]); }}>
+          {source.files.map((item) => <Toggle value={item.path} key={item.path} title={item.path}>
             <span className="block">{item.path.split("/").at(-1)}</span><span className="mt-1 block truncate text-[10px] opacity-50">{item.path.replace("registry/", "").split("/").slice(0, -1).join("/") || "shared"}</span>
-          </button>)}
-        </div>
+          </Toggle>)}
+        </ToggleGroup>
         <div className="min-w-0">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 px-4 py-2 text-xs text-zinc-400">
             <span className="break-all font-mono">{file.path}</span>
@@ -48,7 +51,7 @@ export function UsageExample({ code }: { code: string }) {
     <div className="flex items-center justify-between gap-3"><h2 className="doc-heading">A small starting point</h2>
       <CopyButton className="catalog-control" text={code} onCopySuccess={() => setNotice("Usage example copied.")} onCopyError={() => setNotice("Copy failed. Select and copy the example manually.")}>Copy example</CopyButton>
     </div>
-    <p className="mt-3 text-sm/7 text-zinc-500">Install <code className="inline-code">react</code> and <code className="inline-code">motion</code>, copy the required files, then use the component. Styles are yours to add.</p>
+    <p className="mt-3 text-sm/7 text-zinc-500">Install <code className="inline-code">react</code> and <code className="inline-code">motion</code>, copy the required files, then use the component. Styles are yours to add.{code.includes("@base-ui/react/") && <> This example also uses <code className="inline-code">@base-ui/react</code> for its controls; the animation itself only needs React and Motion.</>}</p>
     <p aria-live="polite" className="min-h-7 text-xs/7 text-brand-600">{notice}</p>
     <pre className="source-code rounded-xl bg-zinc-950" tabIndex={0} aria-label="Usage example"><code>{code}</code></pre>
   </section>;

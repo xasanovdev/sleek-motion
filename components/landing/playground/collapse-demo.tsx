@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import clsx from "clsx";
 import { motion } from "motion/react";
@@ -26,7 +28,7 @@ export function CollapseDemo({
 
   return (
     <PlaygroundCard className={clsx(className)}>
-      <button
+      <Button
         type="button"
         aria-expanded={open}
         aria-controls={panelId}
@@ -44,7 +46,7 @@ export function CollapseDemo({
         >
           <ChevronDownIcon className="size-4 h-lh fill-zinc-500" />
         </motion.span>
-      </button>
+      </Button>
       <Collapse id={panelId} open={open} reducedMotion={reduceMotion}>
         <p className="border-t border-zinc-950/10 p-5 text-base/7 text-pretty text-zinc-600">
           {copy.collapseBody}

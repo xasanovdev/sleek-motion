@@ -1,5 +1,9 @@
 "use client";
 
+import { Checkbox } from "@/components/ui/checkbox";
+
+import { Button } from "@/components/ui/button";
+
 import Image from "next/image";
 import Link from "next/link";
 import { animate, motion, useMotionValue, useTransform } from "motion/react";
@@ -152,7 +156,7 @@ export function ThreadPreviewStudy() {
         <div className={styles.introduction}>
           <p className={styles.eyebrow}><span aria-hidden="true" />A little thought. A lot of care.</p>
           <h1 className={`${styles.headline} text-6xl`}>I turn rough<br />ideas into<br />
-            <button ref={trigger} type="button" className={styles.word} aria-expanded={open} aria-controls={regionId} aria-describedby={hintId}
+            <Button ref={trigger} type="button" className={styles.word} aria-expanded={open} aria-controls={regionId} aria-describedby={hintId}
               onPointerEnter={(event) => {
                 if (event.pointerType !== "mouse") return;
                 suppressed.current = false; hovering.current = true; cancelClose(); setKeyboard(false); setOpen(true);
@@ -171,7 +175,7 @@ export function ThreadPreviewStudy() {
                 if (pinned) dismiss(); else { suppressed.current = false; setPinned(true); setOpen(true); }
               }}>
               interfaces<span className={styles.fallbackLine} aria-hidden="true" />
-            </button><br />people enjoy.
+            </Button><br />people enjoy.
           </h1>
           <p className={styles.description}>Thoughtful websites. Useful details. The kind of work that feels as good as it looks.</p>
           <p id={hintId} className={styles.hint}><CursorArrowRaysIcon className="size-4 shrink-0" aria-hidden="true" /><span>There’s a little more behind <em>interfaces</em>.<small>Hover to peek. Tap to keep it open.</small></span></p>
@@ -195,7 +199,7 @@ export function ThreadPreviewStudy() {
                 setKeyboard(false);
                 if (!pinned) setOpen(false);
               }}>
-              <div className={styles.projectTop}><p><span aria-hidden="true" />sleekmation</p><button type="button" aria-label="Close project preview" className={styles.close} onClick={(event) => { setKeyboard(event.detail === 0); dismiss(true); }}><XMarkIcon className="size-4 shrink-0" aria-hidden="true" /></button></div>
+              <div className={styles.projectTop}><p><span aria-hidden="true" />sleekmation</p><Button type="button" aria-label="Close project preview" className={styles.close} onClick={(event) => { setKeyboard(event.detail === 0); dismiss(true); }}><XMarkIcon className="size-4 shrink-0" aria-hidden="true" /></Button></div>
               <div className={styles.projectVisual}><Image src="/experiments/thread-preview/sleekmation.png" alt="Sleekmation’s homepage, with its motion playground and animation examples." width={1280} height={920} priority unoptimized /></div>
               <figcaption className={styles.projectBottom}><div><p>A little motion.<br />A better experience.</p><small>Design & development · Sleekmation</small></div><Link href="/animations" aria-label="Explore Sleekmation animations"><ArrowUpRightIcon className="size-4 shrink-0" aria-hidden="true" /></Link></figcaption>
             </motion.figure>
@@ -212,8 +216,8 @@ export function ThreadPreviewStudy() {
       <footer className={styles.footer}>
         <div><p className={styles.footerTitle}>ThreadPreview <span>/ Study 01</span></p><p className={styles.footerDescription}>An expressive detail in a real portfolio setting.</p></div>
         <div className={styles.controls}>
-          <label><input type="checkbox" checked={slow} disabled={reduce} onChange={(event) => setSlow(event.target.checked)} />Slow motion</label>
-          <label><input type="checkbox" checked={reduce} disabled={systemReduced} onChange={(event) => setReduced(event.target.checked)} />{systemReduced ? "Reduced motion (system)" : "Reduced motion"}</label>
+          <label><Checkbox checked={slow} disabled={reduce} onCheckedChange={setSlow} />Slow motion</label>
+          <label><Checkbox checked={reduce} disabled={systemReduced} onCheckedChange={setReduced} />{systemReduced ? "Reduced motion (system)" : "Reduced motion"}</label>
         </div>
       </footer>
     </div>

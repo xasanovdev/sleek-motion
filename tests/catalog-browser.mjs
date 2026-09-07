@@ -1,3 +1,4 @@
+import { checkBaseUI } from "./base-ui-browser.mjs";
 import { checkExtended } from "./catalog-extended.mjs";
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
@@ -38,7 +39,7 @@ try {
   await page.getByRole("searchbox").fill("unmatched-pattern");
   assert.equal(await page.getByTestId("catalog-card").count(), 0);
   await page.getByRole("button", { name: "Clear filters" }).click();
-  await page.getByRole("button", { name: "Content", exact: true }).click();
+  await page.getByRole("group", { name: "Animation category", exact: true }).getByRole("button", { name: "Content", exact: true }).click();
   assert.equal(await page.getByTestId("catalog-card").count(), 6);
   await page.getByRole("button", { name: "All", exact: true }).click();
   await page.screenshot({ path: "/private/tmp/sleekmation-catalog-desktop.png", fullPage: false });
@@ -61,10 +62,11 @@ try {
     assert.equal(await page.getByRole("link", { name: "View on GitHub" }).getAttribute("href"), `https://github.com/xasanovdev/sleek-motion/blob/main/${sourcePath}`);
     await page.getByRole("button", { name: "Replay", exact: true }).click();
     await page.waitForTimeout(500);
-    await page.getByLabel("Speed", { exact: true }).selectOption("0.5");
-    await page.getByLabel("Compact preview").check();
+    await page.getByRole("combobox", { name: "Speed", exact: true }).click();
+    await page.getByRole("option", { name: "0.5×", exact: true }).click();
+    await page.getByRole("switch", { name: "Compact preview", exact: true }).check();
     assert.ok(await page.getByTestId("preview-device").evaluate((node) => node.getBoundingClientRect().width <= 320));
-    await page.getByLabel("Reduced motion", { exact: true }).check();
+    await page.getByRole("switch", { name: "Reduced motion", exact: true }).check();
     if (index < 3) {
       await page.getByRole("button", { name: "Hide message", exact: true }).click();
       await page.waitForTimeout(500);
@@ -73,13 +75,13 @@ try {
       await page.waitForTimeout(500);
       assert.equal(await page.getByTestId("demo-motion").count(), 1);
     } else if (slug.includes("swap")) {
-      if (slug.startsWith("directional")) await page.getByLabel("RTL", { exact: true }).check();
+      if (slug.startsWith("directional")) await page.getByRole("switch", { name: "RTL", exact: true }).check();
       await page.getByRole("button", { name: "Next", exact: true }).click();
       await page.waitForTimeout(1000);
       assert.ok((await page.getByTestId("demo-state").textContent()).includes("Keep your bearings"));
     } else {
       await page.getByText("Tune this example", { exact: true }).click();
-      await page.getByLabel("Keep mounted").check();
+      await page.getByRole("checkbox", { name: "Keep mounted", exact: true }).check();
       await page.getByRole("textbox", { name: "Your note" }).fill("Keep this draft");
       await page.getByRole("button", { name: "More content", exact: true }).click();
       await page.getByRole("button", { name: "Close panel", exact: true }).click();
@@ -91,13 +93,13 @@ try {
   }
   await page.goto(`${origin}/animations/fade`);
   await page.evaluate(() => document.fonts.ready);
-  const promptDetails = page.locator("details#prompt");
-  assert.equal(await promptDetails.evaluate((node) => node.open), false, "Full prompt starts collapsed");
-  await page.getByRole("link", { name: "Read the prompt", exact: true }).focus();
+  const promptDetails = page.locator("#prompt-toggle");
+  assert.equal(await promptDetails.getAttribute("aria-expanded"), "false", "Full prompt starts collapsed");
+  await page.getByRole("button", { name: "Read the prompt", exact: true }).focus();
   await page.keyboard.press("Enter");
-  assert.equal(await promptDetails.evaluate((node) => node.open), true, "Keyboard activation reveals the full prompt");
+  assert.equal(await promptDetails.getAttribute("aria-expanded"), "true", "Keyboard activation reveals the full prompt");
   assert.equal(await page.getByLabel("Integration prompt", { exact: true }).textContent(), await (await page.request.get(`${origin}/animations/fade/prompt`)).text());
-  await promptDetails.locator("summary").click();
+  await promptDetails.click();
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: "/private/tmp/sleekmation-detail-desktop.png", fullPage: false });
   await page.evaluate(() => Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: async () => { throw new Error("Denied"); } } }));
@@ -126,8 +128,8 @@ try {
   assert.equal(await page.getByRole("heading", { level: 1 }).textContent(), "Collapse");
   await page.screenshot({ path: "/private/tmp/sleekmation-detail-mobile.png", fullPage: true });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  assert.equal(await page.getByLabel("Reduced motion (system)").isChecked(), true);
-  assert.equal(await page.getByLabel("Reduced motion (system)").isDisabled(), true);
+  assert.equal(await page.getByRole("switch", { name: "Reduced motion (system)", exact: true }).isChecked(), true);
+  assert.equal(await page.getByRole("switch", { name: "Reduced motion (system)", exact: true }).isDisabled(), true);
   await page.emulateMedia({ reducedMotion: "no-preference" });
   for (const slug of ["modal-motion", "drawer-motion"]) {
     await page.goto(`${origin}/animations/${slug}`);
@@ -135,7 +137,7 @@ try {
     const dialog = page.getByRole("dialog");
     await dialog.waitFor();
     await page.waitForFunction(() => {
-      const surface = document.querySelector("dialog[open] > div");
+      const surface = document.querySelector('[role="dialog"]');
       return surface && getComputedStyle(surface).opacity === "1";
     });
     const box = await dialog.boundingBox();
@@ -163,6 +165,7 @@ try {
   await page.waitForTimeout(300);
   await page.locator('.animation-marquee button:not([data-duplicate])').nth(1).click();
   await page.waitForFunction(() => !!document.querySelector('[data-playground-part="panel"] [inert][aria-hidden="true"]'), null, { timeout: 1500 });
+  await checkBaseUI(page, origin);
   assert.deepEqual(errors, []);
   console.log("PASS: catalog search/filter, 39 static detail routes and prompts, behavioral examples, metadata, exact source copying, copy errors, preview controls, kept state, mobile navigation, 320/375px layouts and reduced motion.");
 } finally {

@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@base-ui/react/button";
+
 import { useState } from "react";
 import { Spinner } from "../../registry/animations/loading/spinner";
 
@@ -19,9 +21,9 @@ export default function Example({
           style={{ fontSize: 32, color: "#0072ce" }}
         />
       </div>
-      <button type="button" onClick={() => setPaused(!paused)}>
+      <Button type="button" onClick={() => setPaused(!paused)}>
         {paused ? "Resume loader" : "Pause loader"}
-      </button>
+      </Button>
       <p>Loading activity without a made-up completion percentage.</p>
     </div>
   );

@@ -19,7 +19,7 @@ export async function checkExtended(page, origin, foundation) {
     });
     await preview
       .getByTestId("preview-device")
-      .locator("button, input, [role=region]")
+      .locator("button, [role=checkbox], [role=switch], [role=slider], [role=region]")
       .first()
       .waitFor();
     await page
@@ -99,10 +99,10 @@ export async function checkExtended(page, origin, foundation) {
         await example.getByText("1 changes saved.").waitFor();
         break;
       case "async-button":
-        await example.getByLabel("Simulate an error").check();
+        await example.getByRole("checkbox", { name: "Simulate an error", exact: true }).check();
         await button("Save changes").click();
         await button("Try again").waitFor();
-        await example.getByLabel("Simulate an error").uncheck();
+        await example.getByRole("checkbox", { name: "Simulate an error", exact: true }).uncheck();
         await button("Try again").click();
         await button("Saved").waitFor();
         break;
@@ -127,6 +127,9 @@ export async function checkExtended(page, origin, foundation) {
           .waitFor();
         break;
       case "toggle-motion":
+        await example.getByRole("switch").check();
+        assert.equal(await example.getByRole("switch").isChecked(), true);
+        break;
       case "checkbox-motion":
         await example.getByRole("checkbox").check();
         assert.equal(await example.getByRole("checkbox").isChecked(), true);
@@ -203,6 +206,7 @@ export async function checkExtended(page, origin, foundation) {
         await trigger.click();
         const dialog = page.getByRole("dialog");
         await dialog.waitFor();
+        await page.waitForFunction(() => document.querySelector('[role="dialog"]')?.contains(document.activeElement));
         assert.equal(
           await dialog.evaluate((node) =>
             node.contains(document.activeElement),
@@ -223,10 +227,11 @@ export async function checkExtended(page, origin, foundation) {
           slug === "popover-motion" ? "Open popover" : "Open options",
         );
         await trigger.click();
-        await button("Close panel").waitFor();
-        await button("Close panel").focus();
+        const close = page.getByRole(slug === "dropdown-motion" ? "menuitem" : "button", { name: "Close panel", exact: true });
+        await close.waitFor();
+        await close.focus();
         await page.keyboard.press("Escape");
-        await button("Close panel").waitFor({ state: "hidden" });
+        await close.waitFor({ state: "hidden" });
         assert.equal(await trigger.getAttribute("aria-expanded"), "false");
         break;
       }
@@ -256,9 +261,10 @@ export async function checkExtended(page, origin, foundation) {
         assert.fail("Missing behavioral check: " + slug);
     }
     if (await preview.getByLabel("Speed", { exact: true }).count())
-      await preview.getByLabel("Speed", { exact: true }).selectOption("0.5");
-    await preview.getByLabel("Reduced motion", { exact: true }).check();
-    await preview.getByLabel("Compact preview").check();
+      await preview.getByRole("combobox", { name: "Speed", exact: true }).click();
+      await page.getByRole("option", { name: "0.5×", exact: true }).click();
+    await preview.getByRole("switch", { name: "Reduced motion", exact: true }).check();
+    await preview.getByRole("switch", { name: "Compact preview", exact: true }).check();
     assert.ok(
       await example.evaluate(
         (node) => node.getBoundingClientRect().width <= 320,
@@ -266,9 +272,9 @@ export async function checkExtended(page, origin, foundation) {
     );
     await preview.getByRole("button", { name: "Replay", exact: true }).click();
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await preview.getByLabel("Reduced motion (system)").waitFor();
+    await preview.getByRole("switch", { name: "Reduced motion (system)", exact: true }).waitFor();
     assert.equal(
-      await preview.getByLabel("Reduced motion (system)").isDisabled(),
+      await preview.getByRole("switch", { name: "Reduced motion (system)", exact: true }).isDisabled(),
       true,
     );
     await page.emulateMedia({ reducedMotion: "no-preference" });

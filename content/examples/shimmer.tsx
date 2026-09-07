@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@base-ui/react/button";
+
 import { useState } from "react";
 import { Shimmer } from "../../registry/animations/loading/shimmer";
 
@@ -19,9 +21,9 @@ export default function Example({
           style={{ width: "100%", height: 72, borderRadius: 12 }}
         />
       </div>
-      <button type="button" onClick={() => setPaused(!paused)}>
+      <Button type="button" onClick={() => setPaused(!paused)}>
         {paused ? "Resume loader" : "Pause loader"}
-      </button>
+      </Button>
       <p>Loading activity without a made-up completion percentage.</p>
     </div>
   );

@@ -44,17 +44,15 @@
 .studio-select-wrap select { grid-column: 1 / -1; grid-row: 1; appearance: none; width: 100%; min-height: 34px; padding: 6px 24px 6px 9px; font-size: 12px; font-weight: 500; color: #3f3f46; background: transparent; cursor: pointer; }
 .studio-select-wrap > svg { grid-column: 2; grid-row: 1; place-self: center; pointer-events: none; fill: #8b8b95; }
 .preview-studio .studio-switch { position: relative; display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px; cursor: pointer; border-radius: 6px; }
-.preview-studio .studio-switch input { position: absolute; z-index: 1; inset: 0; margin: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 .studio-switch-copy { display: flex; flex-direction: column; gap: 3px; }
 .studio-switch-copy strong { font-size: 12px; font-weight: 400; color: #52525b; }
 .studio-switch-copy small { font-size: 10px; line-height: 1.5; color: #71717a; }
 .studio-switch-track { position: relative; width: 30px; height: 18px; flex-shrink: 0; border-radius: 20px; background: #e4e4e7; box-shadow: inset 0 0 0 1px rgb(24 24 27 / .05); }
 .studio-switch-track::before { content: ""; position: absolute; top: 3px; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: white; box-shadow: 0 1px 2px rgb(24 24 27 / .12); }
-.studio-switch:has(input:checked) .studio-switch-track { background: #0072ce; }
-.studio-switch:has(input:checked) .studio-switch-track::before { transform: translateX(12px); }
-.studio-switch:has(input:focus-visible) { outline: 2px solid #0072ce; outline-offset: 3px; }
-.studio-switch:has(input:disabled) { cursor: default; }
-.studio-switch input:disabled { cursor: default; }
+.studio-switch[data-checked] .studio-switch-track { background: #0072ce; }
+.studio-switch[data-checked] .studio-switch-track::before { transform: translateX(12px); }
+.studio-switch:focus-visible { outline: 2px solid #0072ce; outline-offset: 3px; }
+.studio-switch[data-disabled] { cursor: default; }
 .studio-native-timing { font-size: 12px; line-height: 1.7; color: #71717a; }
 
 .preview-studio .demo-content { min-height: 250px; }
@@ -84,14 +82,14 @@
 .demo-state-dot[data-visible="true"] { background: #0072ce; }
 
 .prompt-disclosure { margin-top: 20px; border: 1px solid rgb(24 24 27 / .08); border-radius: 10px; background: white; scroll-margin-top: 110px; }
-.prompt-disclosure > summary { display: flex; align-items: center; gap: 14px; min-height: 72px; padding: 16px 20px; cursor: pointer; list-style: none; }
-.prompt-disclosure > summary::-webkit-details-marker { display: none; }
-.prompt-disclosure > summary > svg { fill: #8b8b95; }
-.prompt-disclosure > summary > span { display: flex; flex-direction: column; gap: 4px; }
+.prompt-disclosure > .prompt-disclosure-trigger { display: flex; align-items: center; gap: 14px; min-height: 72px; padding: 16px 20px; cursor: pointer; list-style: none; }
+.prompt-disclosure > .prompt-disclosure-trigger::-webkit-details-marker { display: none; }
+.prompt-disclosure > .prompt-disclosure-trigger > svg { fill: #8b8b95; }
+.prompt-disclosure > .prompt-disclosure-trigger > span { display: flex; flex-direction: column; gap: 4px; }
 .prompt-disclosure strong { font-size: 13px; font-weight: 500; color: #52525b; }
 .prompt-disclosure small { font-size: 11px; line-height: 1.6; color: #71717a; }
 .prompt-disclosure-chevron { margin-left: auto; }
-.prompt-disclosure[open] .prompt-disclosure-chevron { transform: rotate(180deg); }
+.prompt-disclosure[data-panel-open] .prompt-disclosure-chevron { transform: rotate(180deg); }
 .prompt-disclosure-content { padding: 0 20px 20px; }
 .prompt-disclosure-content > p { margin-bottom: 16px; max-width: 68ch; font-size: 13px; line-height: 1.8; color: #71717a; }
 .prompt-disclosure pre { max-height: 420px; overflow: auto; padding: 20px; border-radius: 8px; background: #f7f9fb; font-size: 11px; line-height: 1.8; color: #52525b; }
@@ -147,8 +145,10 @@
   .animation-description { font-size: 16px; }
   .animation-page-nav { gap: 22px; }
   .animation-page-nav a { min-height: 44px; }
-  .prompt-disclosure > summary { padding: 16px; }
+  .prompt-disclosure > .prompt-disclosure-trigger { padding: 16px; }
   .prompt-disclosure strong { font-size: 14px; }
   .prompt-disclosure-content { padding-inline: 16px; }
   .prompt-disclosure-content > p { font-size: 16px; }
 }
+
+.prompt-disclosure-trigger { width: 100%; text-align: start; }

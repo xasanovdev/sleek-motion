@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/16/solid";
 import clsx from "clsx";
 import { useState } from "react";
@@ -70,7 +72,7 @@ function ArrowButton({
   onClick: () => void;
 }) {
   return (
-    <button
+    <Button
       type="button"
       aria-label={label}
       onClick={onClick}
@@ -81,6 +83,6 @@ function ArrowButton({
         className="pointer-fine:hidden absolute top-1/2 left-1/2 size-[max(100%,3rem)] -translate-1/2"
       />
       {children}
-    </button>
+    </Button>
   );
 }

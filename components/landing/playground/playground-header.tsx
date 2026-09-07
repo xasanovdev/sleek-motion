@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+
 import { ArrowPathIcon } from "@heroicons/react/16/solid";
 import clsx from "clsx";
 
@@ -30,7 +32,7 @@ export function PlaygroundHeader({
         <span className="font-medium text-zinc-950">{label}</span>
       </div>
       <div className="text-base/7 sm:text-sm/6">
-        <button
+        <Button
           type="button"
           aria-label={replayLabel}
           onClick={onReplay}
@@ -38,7 +40,7 @@ export function PlaygroundHeader({
         >
           <ArrowPathIcon className="size-4 h-lh shrink-0 fill-current" />
           <span className="hidden min-[375px]:inline">{replayLabel}</span>
-        </button>
+        </Button>
       </div>
     </div>
   );

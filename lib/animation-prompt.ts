@@ -17,6 +17,7 @@ export function getAnimationPrompt(slug: string) {
   const doc = getAnimationDoc(slug);
   if (!doc) throw new Error("Unknown animation");
   const source = getRegistrySource(slug);
+  const usage = getUsageExample(slug);
   const instructions = [
     "Integrate Sleekmation's " + doc.name + " into my existing project.",
     "Purpose: " + doc.purpose,
@@ -25,6 +26,7 @@ export function getAnimationPrompt(slug: string) {
     "1. Inspect my framework, package manager, design system and the relevant UI before editing. Reuse existing controls and styles. If the target UI is unclear, ask one focused question.",
     "2. Use the complete source snapshot below. Save every file to its named path, including registry/LICENSE, or update all relative imports consistently. Preserve the included license notice without replacing my project license. GitHub links are references and may lag this snapshot; a missing remote file is not a blocker.",
     "3. These sources require React 19 and Motion 13 (motion/react), plus CSS Module support for loaders. Check existing versions before changing dependencies. Use the project's package manager; do not add Next.js, Tailwind, a provider, or an installer for this component.",
+    usage.includes("@base-ui/react/") ? "Example integration: this example also imports @base-ui/react 1.8 for accessible controls. Reuse it if the project already uses Base UI, install it with the existing package manager if appropriate, or adapt the controls to the existing design system. The copied registry source itself has no Base UI dependency." : "",
     "4. Adapt the example to the target UI. Keep native semantics, focus, keyboard behavior, reduced-motion handling, SSR visibility and cleanup intact. Avoid movement on frequently repeated keyboard actions.",
     "Use when: " + doc.use,
     "Avoid: " + doc.avoid,

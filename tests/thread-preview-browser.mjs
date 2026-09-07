@@ -74,7 +74,7 @@ try {
   assert.equal(await page.locator('meta[name="robots"]').getAttribute("content"), "noindex, nofollow");
   await page.screenshot({ path: "/private/tmp/thread-preview-rest.png" });
 
-  await page.getByLabel("Slow motion", { exact: true }).check();
+  await page.getByRole("checkbox", { name: "Slow motion", exact: true }).check();
   await word.hover();
   await page.waitForTimeout(120);
   assert.notEqual(await path.getAttribute("d"), closedPath, "Thread extends during the entrance");
@@ -98,7 +98,7 @@ try {
   assert.equal(await card.evaluate((node) => node.inert), true);
   await page.waitForFunction((expected) => document.querySelector('[data-testid="thread-path"]').getAttribute("d") === expected, closedPath);
   assert.equal(await path.getAttribute("d"), closedPath, "Thread returns to the original underline");
-  await page.getByLabel("Slow motion", { exact: true }).uncheck();
+  await page.getByRole("checkbox", { name: "Slow motion", exact: true }).uncheck();
 
   // Interrupt both directions before the timeline completes.
   for (let index = 0; index < 3; index++) {
@@ -128,14 +128,14 @@ try {
   await waitClosed();
   assert.equal(await word.evaluate((node) => node === document.activeElement), true);
   await page.keyboard.press("Tab");
-  assert.equal(await page.getByLabel("Slow motion", { exact: true }).evaluate((node) => node === document.activeElement), true, "Dismissed preview is skipped by Tab");
+  assert.equal(await page.getByRole("checkbox", { name: "Slow motion", exact: true }).evaluate((node) => node === document.activeElement), true, "Dismissed preview is skipped by Tab");
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await word.hover();
   await page.waitForTimeout(40);
   assert.equal(await opacity(), 1);
   assert.equal(await card.evaluate((node) => getComputedStyle(node).clipPath), "none");
-  assert.equal(await page.getByLabel("Reduced motion (system)").isDisabled(), true);
+  assert.equal(await page.getByRole("checkbox", { name: "Reduced motion (system)", exact: true }).isDisabled(), true);
   await page.mouse.move(10, 10);
   await waitClosed();
   await page.emulateMedia({ reducedMotion: "no-preference" });

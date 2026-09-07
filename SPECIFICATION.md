@@ -110,6 +110,11 @@ Core copied components may depend only on:
 Radix, Base UI, routing frameworks, class-name helpers, and other packages may
 appear in separate integration recipes but are not core dependencies.
 
+The website uses `@base-ui/react` as its interactive UI foundation. Base UI owns
+control semantics, focus, keyboard interaction, dismissal and overlay placement;
+Sleekmation owns visual styling and animation. Copied examples that use Base UI
+must disclose it separately from the React + Motion registry dependencies.
+
 Motion is installed from the `motion` package and React APIs are imported from
 `motion/react`. Sleekmation does not use the older `react-motion` package.
 

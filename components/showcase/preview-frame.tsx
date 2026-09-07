@@ -1,7 +1,12 @@
 "use client";
 
+import { Switch } from "@base-ui/react/switch";
+import { Select } from "@/components/ui/select";
+
+import { Button } from "@/components/ui/button";
+
 import { useState, type ReactNode } from "react";
-import { ArrowPathIcon, ArrowRightIcon, CheckIcon, ChevronDownIcon, CursorArrowRaysIcon, Squares2X2Icon } from "@heroicons/react/16/solid";
+import { ArrowPathIcon, ArrowRightIcon, CheckIcon, CursorArrowRaysIcon, Squares2X2Icon } from "@heroicons/react/16/solid";
 import { getAnimationDoc } from "@/content/animations";
 import type { RegistrySlug } from "@/registry/manifest";
 import { useMotionPreference } from "@/registry/internal/use-motion-preference";
@@ -31,11 +36,10 @@ type PreviewSettings = ReturnType<typeof usePreviewSettings>;
 function PreviewSwitch({ label, description, checked, disabled, onChange }: {
   label: string; description: string; checked: boolean; disabled?: boolean; onChange: (checked: boolean) => void;
 }) {
-  return <label className="studio-switch">
-    <input type="checkbox" name={label.toLowerCase().replaceAll(" ", "-")} aria-label={label} checked={checked} disabled={disabled} onChange={(event) => onChange(event.target.checked)} />
+  return <Switch.Root className="studio-switch" name={label.toLowerCase().replaceAll(" ", "-")} aria-label={label} checked={checked} disabled={disabled} onCheckedChange={onChange}>
     <span className="studio-switch-copy"><strong>{label}</strong><small>{description}</small></span>
-    <span className="studio-switch-track" aria-hidden="true" />
-  </label>;
+    <Switch.Thumb className="studio-switch-track" aria-hidden="true" />
+  </Switch.Root>;
 }
 
 export function PreviewFrame({ slug, settings, children, prompt, timed = true, directional = false }: {
@@ -55,7 +59,7 @@ export function PreviewFrame({ slug, settings, children, prompt, timed = true, d
       <div className="studio-workspace">
         <div className="preview-toolbar">
           <div className="studio-toolbar-title"><Squares2X2Icon className="size-4 shrink-0" aria-hidden="true" /><p>Live preview</p><span className="studio-live-label">Interactive</span></div>
-          <button type="button" className="studio-replay" onClick={() => settings.setReplay((value) => value + 1)}><ArrowPathIcon className="size-4 shrink-0" aria-hidden="true" />Replay</button>
+          <Button type="button" className="studio-replay" onClick={() => settings.setReplay((value) => value + 1)}><ArrowPathIcon className="size-4 shrink-0" aria-hidden="true" />Replay</Button>
         </div>
         <div className="preview-stage studio-canvas" data-compact={settings.compact}>
           <div className="preview-device" data-testid="preview-device">{children}</div>
@@ -72,14 +76,15 @@ export function PreviewFrame({ slug, settings, children, prompt, timed = true, d
         {prompt && <div className="studio-use">
           <PromptCopy slug={slug} prompt={prompt} primary />
           <p><CheckIcon className="size-4 shrink-0" aria-hidden="true" />Source + agent instructions included</p>
-          <a href="#prompt" className="studio-read-prompt" onClick={() => {
-            const details = document.getElementById("prompt");
-            if (details instanceof HTMLDetailsElement) details.open = true;
-          }}>Read the prompt<ArrowRightIcon className="size-4 shrink-0" aria-hidden="true" /></a>
+          <Button className="studio-read-prompt" onClick={() => {
+            const trigger = document.getElementById("prompt-toggle");
+            if (trigger?.getAttribute("aria-expanded") !== "true") trigger?.click();
+            requestAnimationFrame(() => document.getElementById("prompt")?.scrollIntoView({ block: "start" }));
+          }}>Read the prompt<ArrowRightIcon className="size-4 shrink-0" aria-hidden="true" /></Button>
         </div>}
         <div className="preview-options studio-settings">
           <p className="studio-settings-title">Try it your way</p>
-          {timed && <label className="studio-speed"><span>Playback speed</span><span className="studio-select-wrap"><select name="preview-speed" aria-label="Speed" value={settings.speed} onChange={(event) => settings.setSpeed(Number(event.target.value))}><option value={0.25}>0.25×</option><option value={0.5}>0.5×</option><option value={1}>1× · Normal</option><option value={2}>2×</option></select><ChevronDownIcon className="size-4 shrink-0" aria-hidden="true" /></span></label>}
+          {timed && <div className="studio-speed"><span>Playback speed</span><Select name="preview-speed" label="Speed" value={settings.speed} onValueChange={settings.setSpeed} options={[{value: .25, label: "0.25×"}, {value: .5, label: "0.5×"}, {value: 1, label: "1× · Normal"}, {value: 2, label: "2×"}]} /></div>}
           {!timed && <p className="studio-native-timing">{slug === "scroll-progress" ? "Progress follows your scroll position." : "Uses natural spring timing."}</p>}
           <PreviewSwitch label={settings.systemReduced ? "Reduced motion (system)" : "Reduced motion"} description={settings.systemReduced ? "Following your device preference" : "Preview with less movement"} checked={reduce} disabled={settings.systemReduced} onChange={settings.setReduced} />
           <PreviewSwitch label="Compact preview" description="Try a smaller screen" checked={settings.compact} onChange={settings.setCompact} />

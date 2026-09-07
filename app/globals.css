@@ -1,5 +1,6 @@
 @import url("https://rsms.me/inter/inter.css");
 @import "tailwindcss";
+@import "../components/ui/controls.css";
 
 :root {
   --page: #ffffff;
@@ -24,6 +25,7 @@ html {
 }
 
 body {
+  position: relative;
   min-width: 320px;
   background: var(--page);
   color: var(--color-zinc-950);
@@ -180,4 +182,8 @@ body {
   .marquee-playback {
     display: none;
   }
+}
+
+.app-root {
+  isolation: isolate;
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { Switch } from "@base-ui/react/switch";
 import { useState } from "react";
 import { ToggleMotion } from "../../registry/animations/feedback/toggle-motion";
 
@@ -16,7 +17,7 @@ export default function Example({
       onPointerDown={() => setKeyboard(false)}
       style={{ display: "flex", alignItems: "center", gap: 16 }}
     >
-      <span
+      <Switch.Root name="notifications" checked={checked} onCheckedChange={setChecked}
         style={{
           position: "relative",
           display: "inline-block",
@@ -42,21 +43,7 @@ export default function Example({
             background: "white",
           }}
         />
-        <input
-          name="notifications"
-          type="checkbox"
-          checked={checked}
-          onChange={(event) => setChecked(event.target.checked)}
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            opacity: 0,
-            cursor: "pointer",
-          }}
-        />
-      </span>
+      </Switch.Root>
       Notifications {checked ? "on" : "off"}
     </label>
   );

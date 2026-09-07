@@ -1,5 +1,7 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+
 import {
   ArrowsRightLeftIcon,
   Bars3BottomLeftIcon,
@@ -50,7 +52,7 @@ export function AnimationMarquee({
                 animations.map(({ id, icon: Icon }, index) => {
                   const duplicate = group > 0 || repeat > 0;
                   return (
-                    <button
+                    <Button
                       key={`${repeat}-${id}`}
                       type="button"
                       tabIndex={duplicate ? -1 : 0}
@@ -63,7 +65,7 @@ export function AnimationMarquee({
                       <Icon aria-hidden="true" className="size-4 shrink-0" />
                       {copy.tabs[id]}
                       <span aria-hidden="true" className="font-mono text-xs opacity-50">0{index + 1}</span>
-                    </button>
+                    </Button>
                   );
                 }),
               )}
@@ -71,7 +73,7 @@ export function AnimationMarquee({
           ))}
         </div>
       </div>
-      <button
+      <Button
         type="button"
         className="marquee-playback pressable grid size-11 shrink-0 place-items-center rounded-full border border-zinc-200 bg-white text-zinc-500 hover:text-brand-500"
         aria-label={paused ? copy.resumeMotion : copy.pauseMotion}
@@ -79,7 +81,7 @@ export function AnimationMarquee({
         onClick={() => setPaused((current) => !current)}
       >
         <PlaybackIcon aria-hidden="true" className="size-4" />
-      </button>
+      </Button>
     </div>
   );
 }

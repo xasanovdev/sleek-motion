@@ -1714,3 +1714,75 @@
     transform: none;
   }
 }
+
+/* Scroll layers remain separate from hover and filter-layout transforms. */
+.headlineShift {
+  display: block;
+}
+.sculptureTravel {
+  width: 100%;
+  height: 100%;
+}
+.projectTrack {
+  position: relative;
+}
+.artMedia,
+.artObject {
+  position: absolute;
+  inset: 0;
+}
+.artMedia img {
+  object-fit: cover;
+  transition: transform 1.2s var(--ease);
+}
+.projectButton:hover .artMedia img {
+  transform: scale(1.035);
+}
+.otherwhere .artMedia img {
+  object-position: 50% 58%;
+  filter: brightness(0.85) saturate(0.45);
+}
+.studioBody > .studioSculpture {
+  position: relative;
+  width: 100%;
+  height: 310px;
+  max-width: 350px;
+}
+.studioSculptureCaption {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 7px;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+}
+.servicesIntro > div > p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #66675e;
+  margin-top: 26px;
+}
+@media (max-width: 760px) {
+  .studioSculpture {
+    width: 220px;
+    height: 210px;
+    margin: -15px auto 18px;
+  }
+  .studioSculptureCaption {
+    font-size: 6px;
+  }
+  .servicesIntro > div > p {
+    margin-top: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page .artMedia,
+  .page .artObject,
+  .page .headlineShift {
+    transform: none !important;
+  }
+  .projectButton:hover .artMedia img {
+    transform: none;
+  }
+}

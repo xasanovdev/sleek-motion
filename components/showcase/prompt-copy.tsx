@@ -1,8 +1,11 @@
 "use client";
 
+import { Collapsible } from "@base-ui/react/collapsible";
+import { Input } from "@base-ui/react/input";
+
 import { useEffect, useRef, useState } from "react";
 import { ClipboardDocumentIcon, CodeBracketIcon, ChevronDownIcon } from "@heroicons/react/16/solid";
-import { AsyncButton } from "@/registry/animations/feedback/async-button";
+import { AsyncButton } from "@/components/ui/motion-buttons";
 
 const cache = new Map<string, Promise<string>>();
 function prepare(slug: string) {
@@ -52,13 +55,13 @@ export function PromptCopy({ slug, prompt, primary = false }: { slug: string; pr
   return <div className="prompt-copy" onPointerEnter={warm} onFocus={warm}>
     <AsyncButton className={`catalog-control ${primary ? "catalog-control-primary" : ""}`} status={status} loadingContent="Preparing…" successContent="Prompt copied" errorContent="Try copy again" onClick={() => void copy()}><span className="prompt-button-content">{primary && <ClipboardDocumentIcon className="size-4 shrink-0" aria-hidden="true" />}Copy prompt</span></AsyncButton>
     <p role="status" className="copy-notice">{notice}</p>
-    {manual && <textarea name="manual-prompt" className="manual-prompt" aria-label="Prompt for manual copying" value={manual} readOnly onFocus={(event) => event.currentTarget.select()} />}
+    {manual && <Input render={<textarea />} name="manual-prompt" className="manual-prompt" aria-label="Prompt for manual copying" value={manual} readOnly onFocus={(event) => event.currentTarget.select()} />}
   </div>;
 }
 
 export function PromptPanel({ prompt }: { prompt: string }) {
-  return <details id="prompt" className="prompt-disclosure">
-    <summary><CodeBracketIcon className="size-4 shrink-0" aria-hidden="true" /><span><strong>Everything your agent needs</strong><small>Integration instructions, example and complete source</small></span><ChevronDownIcon className="prompt-disclosure-chevron size-4 shrink-0" aria-hidden="true" /></summary>
+  return <Collapsible.Root id="prompt" className="prompt-disclosure">
+    <Collapsible.Trigger id="prompt-toggle" className="prompt-disclosure-trigger"><CodeBracketIcon className="size-4 shrink-0" aria-hidden="true" /><span><strong>Everything your agent needs</strong><small>Integration instructions, example and complete source</small></span><ChevronDownIcon className="prompt-disclosure-chevron size-4 shrink-0" aria-hidden="true" /></Collapsible.Trigger><Collapsible.Panel>
     <div className="prompt-disclosure-content"><p>This is the exact prompt copied by the button above. Paste it into your coding agent to adapt the animation to your project.</p><pre tabIndex={0} aria-label="Integration prompt">{prompt}</pre></div>
-  </details>;
+  </Collapsible.Panel></Collapsible.Root>;
 }

@@ -20,7 +20,7 @@ import { Collapse } from "@/registry/animations/layout/collapse";
 | `animations/viewport` | `ScrollReveal`, `ScrollProgress`, `PageTransition`                                                              | Occasional viewport entry, reading progress and route content |
 | `recipes/overlays`    | `Backdrop`, `ModalMotion`, `PopoverMotion`, `DropdownMotion`, `DrawerMotion`, `ToastMotion`, `LoadingOverlay`   | Motion adapters for accessible overlays                       |
 
-All foundation and V1 entries from the specification now have implementations. All 39 entries have catalog pages at `/animations`, with working previews, usage/API guidance, complete integration prompts, source copying and GitHub references. The prompt carries an authoritative source snapshot so unpublished source links are not required for integration. Each component has a separate file except the paired `Stagger` / `StaggerItem`. Recipes have their own barrel at `registry/recipes/overlays`.
+All foundation and V1 entries from the specification now have implementations. All 39 entries have catalog pages at `/animations`, with working previews, usage/API guidance, complete integration prompts, source copying and GitHub references. The prompt carries an authoritative source snapshot. Base UI controls in integration examples are declared separately; the registry itself remains React + Motion only. Each component has a separate file except the paired `Stagger` / `StaggerItem`. Recipes have their own barrel at `registry/recipes/overlays`.
 
 ## Shared contract
 

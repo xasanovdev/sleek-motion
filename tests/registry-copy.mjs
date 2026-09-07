@@ -48,7 +48,8 @@ try {
     assert.ok(prompt.includes("https://github.com/xasanovdev/sleek-motion"));
     for (const file of source.files) assert.ok(prompt.includes(file.code.trimEnd()), "Prompt contains complete " + file.path);
     assert.match(prompt, /React 19 and Motion 13/);
-    execFileSync("bun", ["build", input, "--outdir", join(destination, "build"), "--external", "react", "--external", "react/*", "--external", "motion", "--external", "motion/*"], { stdio: "pipe" });
+    if (usage.includes("@base-ui/react/")) assert.match(prompt, /example also imports @base-ui\/react 1\.8/);
+    execFileSync("bun", ["build", input, "--outdir", join(destination, "build"), "--external", "react", "--external", "react/*", "--external", "motion", "--external", "motion/*", "--external", "@base-ui/react/*"], { stdio: "pipe" });
   }
   await symlink(join(root, "node_modules"), join(output, "node_modules"), "dir");
   await writeFile(join(output, "css.d.ts"), 'declare module "*.module.css" { const classes: Record<string, string>; export default classes; }');

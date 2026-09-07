@@ -1,12 +1,7 @@
 "use client";
 
 import { Dialog } from "@base-ui/react/dialog";
-import {
-  AnimatePresence,
-  MotionConfig,
-  motion,
-  useReducedMotion,
-} from "motion/react";
+import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import Image from "next/image";
 import {
   useEffect,
@@ -15,9 +10,16 @@ import {
   type FormEvent,
   type MouseEvent,
   type RefObject,
-  type ReactNode,
 } from "react";
 import { AgencySculpture } from "./agency-sculpture";
+import {
+  AgencyMotion,
+  ProjectParallax,
+  ScrollLayer,
+  ScrollReveal,
+  useSceneProgress,
+  useAgencyReducedMotion,
+} from "./agency-motion";
 import { projects, services, type Project } from "./agency-content";
 import styles from "./agency.module.css";
 import "lenis/dist/lenis.css";
@@ -61,38 +63,37 @@ function Asterisk({ className = "" }: { className?: string }) {
   );
 }
 
-function Reveal({
-  children,
-  className = "",
+function ProjectArt({
+  project,
+  animated = false,
 }: {
-  children: ReactNode;
-  className?: string;
+  project: Project;
+  animated?: boolean;
 }) {
+  const target = useRef<HTMLDivElement>(null);
+  const progress = useSceneProgress(target);
   return (
-    <motion.div
-      className={className}
-      initial={{ y: 24 }}
-      whileInView={{ y: 0 }}
-      viewport={{ once: true, amount: 0.12 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      ref={target}
+      className={`${styles.projectArt} ${styles[project.theme]}`}
     >
-      {children}
-    </motion.div>
-  );
-}
-
-function ProjectArt({ project }: { project: Project }) {
-  return (
-    <div className={`${styles.projectArt} ${styles[project.theme]}`}>
       {project.theme === "soma" && (
         <>
-          <Image
-            src="/experiments/agency/oranges.jpg"
-            alt="Sunlit oranges in a yellow bowl on orange fabric"
-            fill
-            sizes="(max-width: 700px) 100vw, 50vw"
-            className={styles.somaPhoto}
-          />
+          <ScrollLayer
+            progress={progress}
+            className={styles.artMedia}
+            y={[22, -22]}
+            scale={[1.15, 1.15]}
+            disabled={!animated}
+          >
+            <Image
+              src="/experiments/agency/oranges.jpg"
+              alt="Sunlit oranges in a yellow bowl on orange fabric"
+              fill
+              sizes="(max-width: 700px) 100vw, 50vw"
+              className={styles.somaPhoto}
+            />
+          </ScrollLayer>
           <div className={styles.somaStamp}>
             A LITTLE
             <br />
@@ -100,32 +101,48 @@ function ProjectArt({ project }: { project: Project }) {
             <br />
             GOES A LONG WAY.
           </div>
-          <div className={styles.can}>
-            <span className={styles.canRim} />
-            <span className={styles.canSmall}>BOTANICAL SODA</span>
-            <strong>
-              soma<span>®</span>
-            </strong>
-            <span className={styles.canSun}>✳</span>
-            <span className={styles.canFlavor}>
-              BLOOD ORANGE
-              <br />& A LITTLE OPTIMISM
-            </span>
-            <span className={styles.canVolume}>
-              GOOD ENERGY. NATURALLY. &nbsp; 330 ML
-            </span>
-          </div>
+          <ScrollLayer
+            progress={progress}
+            className={styles.artObject}
+            y={[30, -30]}
+            rotate={[-4, 4]}
+            disabled={!animated}
+          >
+            <div className={styles.can}>
+              <span className={styles.canRim} />
+              <span className={styles.canSmall}>BOTANICAL SODA</span>
+              <strong>
+                soma<span>®</span>
+              </strong>
+              <span className={styles.canSun}>✳</span>
+              <span className={styles.canFlavor}>
+                BLOOD ORANGE
+                <br />& A LITTLE OPTIMISM
+              </span>
+              <span className={styles.canVolume}>
+                GOOD ENERGY. NATURALLY. &nbsp; 330 ML
+              </span>
+            </div>
+          </ScrollLayer>
           <span className={styles.artCorner}>SIP ON THE BRIGHT SIDE. ↗</span>
         </>
       )}
       {project.theme === "otherwhere" && (
         <>
-          <Image
-            src="/experiments/agency/architecture.jpg"
-            alt="Sculptural concrete architecture under a clear sky"
-            fill
-            sizes="(max-width: 700px) 100vw, 50vw"
-          />
+          <ScrollLayer
+            progress={progress}
+            className={styles.artMedia}
+            y={[22, -22]}
+            scale={[1.15, 1.15]}
+            disabled={!animated}
+          >
+            <Image
+              src="/experiments/agency/architecture.jpg"
+              alt="Sculptural concrete architecture under a clear sky"
+              fill
+              sizes="(max-width: 700px) 100vw, 50vw"
+            />
+          </ScrollLayer>
           <div className={styles.architectureShade} />
           <span className={styles.otherwhereTop}>
             STAY SOMEWHERE THAT STAYS WITH YOU.
@@ -154,7 +171,15 @@ function ProjectArt({ project }: { project: Project }) {
             <span>SCRIPT</span>
             <sup>®</sup>
           </div>
-          <Asterisk className={styles.festivalStar} />
+          <ScrollLayer
+            progress={progress}
+            className={styles.artObject}
+            y={[20, -20]}
+            rotate={[-22, 22]}
+            disabled={!animated}
+          >
+            <Asterisk className={styles.festivalStar} />
+          </ScrollLayer>
           <div className={styles.festivalBottom}>
             <span>
               MUSIC. ART.
@@ -174,55 +199,63 @@ function ProjectArt({ project }: { project: Project }) {
           <span className={styles.folioTag}>
             SPACE FOR YOUR NEXT BIG THING.
           </span>
-          <div className={styles.folioWindow}>
-            <div className={styles.folioToolbar}>
-              <b>
-                folio<span>✳</span>
-              </b>
-              <span>YOUR CREATIVE SPACE</span>
-              <i>JD</i>
-            </div>
-            <div className={styles.folioBody}>
-              <aside>
-                <b>Workspace</b>
-                <span>⌂ &nbsp; Overview</span>
-                <span>▦ &nbsp; Projects</span>
-                <span>◷ &nbsp; This week</span>
-                <small>YOUR SPACE, YOUR PACE.</small>
-              </aside>
-              <div className={styles.folioMain}>
-                <span>MONDAY, SEPTEMBER 7</span>
-                <h3>
-                  Good things
-                  <br />
-                  start here.
-                </h3>
-                <div className={styles.folioMiniCards}>
-                  <div>
-                    <i>↗</i>
-                    <b>
-                      The next
-                      <br />
-                      big idea
-                    </b>
-                    <small>IN PROGRESS · 4 TASKS</small>
+          <ScrollLayer
+            progress={progress}
+            className={styles.artObject}
+            y={[24, -24]}
+            rotate={[-3, 3]}
+            disabled={!animated}
+          >
+            <div className={styles.folioWindow}>
+              <div className={styles.folioToolbar}>
+                <b>
+                  folio<span>✳</span>
+                </b>
+                <span>YOUR CREATIVE SPACE</span>
+                <i>JD</i>
+              </div>
+              <div className={styles.folioBody}>
+                <aside>
+                  <b>Workspace</b>
+                  <span>⌂ &nbsp; Overview</span>
+                  <span>▦ &nbsp; Projects</span>
+                  <span>◷ &nbsp; This week</span>
+                  <small>YOUR SPACE, YOUR PACE.</small>
+                </aside>
+                <div className={styles.folioMain}>
+                  <span>MONDAY, SEPTEMBER 7</span>
+                  <h3>
+                    Good things
+                    <br />
+                    start here.
+                  </h3>
+                  <div className={styles.folioMiniCards}>
+                    <div>
+                      <i>↗</i>
+                      <b>
+                        The next
+                        <br />
+                        big idea
+                      </b>
+                      <small>IN PROGRESS · 4 TASKS</small>
+                    </div>
+                    <div>
+                      <i>✳</i>
+                      <b>
+                        A little
+                        <br />
+                        room to play
+                      </b>
+                      <small>EXPLORATION · 6 IDEAS</small>
+                    </div>
                   </div>
-                  <div>
-                    <i>✳</i>
-                    <b>
-                      A little
-                      <br />
-                      room to play
-                    </b>
-                    <small>EXPLORATION · 6 IDEAS</small>
+                  <div className={styles.folioTask}>
+                    ○ &nbsp; Make something you believe in <span>Today ↗</span>
                   </div>
-                </div>
-                <div className={styles.folioTask}>
-                  ○ &nbsp; Make something you believe in <span>Today ↗</span>
                 </div>
               </div>
             </div>
-          </div>
+          </ScrollLayer>
           <span className={styles.folioBottom}>LESS FRICTION. MORE FLOW.</span>
         </>
       )}
@@ -428,9 +461,9 @@ function InquiryDialog({
 }
 
 export function AgencyPage() {
-  const reducedMotion = useReducedMotion();
+  const reducedMotion = useAgencyReducedMotion();
   const [motionPaused, setMotionPaused] = useState(false);
-  const paused = !!reducedMotion || motionPaused;
+  const paused = reducedMotion || motionPaused;
   const [filter, setFilter] = useState("All work");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [inquiryOpen, setInquiryOpen] = useState(false);
@@ -442,6 +475,12 @@ export function AgencyPage() {
   const projectTrigger = useRef<HTMLButtonElement>(null);
   const inquiryTrigger = useRef<HTMLButtonElement>(null);
   const menuTrigger = useRef<HTMLButtonElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
+  const studioRef = useRef<HTMLElement>(null);
+  const contactRef = useRef<HTMLElement>(null);
+  const heroProgress = useSceneProgress(heroRef, "leave");
+  const studioProgress = useSceneProgress(studioRef);
+  const contactProgress = useSceneProgress(contactRef, "enter");
 
   function openInquiry(event: MouseEvent<HTMLButtonElement>) {
     inquiryTrigger.current = event.currentTarget;
@@ -487,363 +526,439 @@ export function AgencyPage() {
 
   return (
     <MotionConfig reducedMotion={paused ? "always" : "user"}>
-      <div className={styles.page} data-paused={paused}>
-        <a className={styles.skipLink} href="#agency-main">
-          Skip to content
-        </a>
-        <header className={styles.header}>
-          <a href="#" className={styles.logo} aria-label="Forme home">
-            forme<span>®</span>
+      <AgencyMotion paused={paused}>
+        <div className={styles.page} data-paused={paused}>
+          <a className={styles.skipLink} href="#agency-main">
+            Skip to content
           </a>
-          <span className={styles.headerDescriptor}>
-            INDEPENDENT MINDS.
-            <br />
-            EXTRAORDINARY POSSIBILITIES.
-          </span>
-          <nav aria-label="Main navigation" className={styles.desktopNav}>
-            <a href="#work">
-              Work <sup>04</sup>
-            </a>
-            <a href="#studio">Studio</a>
-            <a href="#services">Expertise</a>
-          </nav>
-          <button className={styles.headerContact} onClick={openInquiry}>
-            Let’s talk <Arrow diagonal />
-          </button>
-          <Dialog.Root open={menuOpen} onOpenChange={setMenuOpen}>
-            <Dialog.Trigger
-              ref={menuTrigger}
-              className={styles.menuButton}
-              aria-label="Open navigation"
-            >
-              <span />
-              <span />
-            </Dialog.Trigger>
-            <Dialog.Portal>
-              <Dialog.Backdrop className={styles.backdrop} />
-              <Dialog.Popup
-                className={`${styles.dialog} ${styles.mobileMenu}`}
-                data-lenis-prevent
-              >
-                <div className={styles.dialogTop}>
-                  <Dialog.Title>forme®</Dialog.Title>
-                  <Dialog.Close
-                    className={styles.close}
-                    aria-label="Close navigation"
-                  >
-                    ×
-                  </Dialog.Close>
-                </div>
-                <nav aria-label="Mobile navigation">
-                  {[
-                    ["Work", "work"],
-                    ["Studio", "studio"],
-                    ["Expertise", "services"],
-                  ].map(([label, id]) => (
-                    <a
-                      key={id}
-                      href={`#${id}`}
-                      onClick={() => setMenuOpen(false)}
-                    >
-                      {label}
-                      <Arrow diagonal />
-                    </a>
-                  ))}
-                </nav>
-                <button
-                  className={styles.pill}
-                  onClick={() => {
-                    inquiryTrigger.current = menuTrigger.current;
-                    setMenuOpen(false);
-                    setInquiryOpen(true);
-                  }}
-                >
-                  Let’s talk <Arrow diagonal />
-                </button>
-              </Dialog.Popup>
-            </Dialog.Portal>
-          </Dialog.Root>
-        </header>
-
-        <main id="agency-main">
-          <section className={styles.hero} aria-labelledby="hero-title">
-            <div className={styles.heroEyebrow}>
-              <span className={styles.dot} /> A BRAND & DIGITAL DESIGN STUDIO
-            </div>
-            <h1 id="hero-title" className={styles.heroTitle}>
-              <span>Different</span>
-              <span>
-                by design<span className={styles.orangePeriod}>.</span>
-              </span>
-            </h1>
-            <div className={styles.sculptureWrap}>
-              <AgencySculpture paused={paused} />
-              <span className={styles.sculptureCaption}>
-                A NEW PERSPECTIVE, ALWAYS. ↗
-              </span>
-            </div>
-            <div className={styles.heroBottom}>
-              <a
-                href="#work"
-                className={styles.roundLink}
-                aria-label="Explore selected work"
-              >
-                <Arrow />
-              </a>
-              <p>
-                We shape brands and build digital experiences
-                <br className={styles.desktopBreak} /> for people ready to do
-                things differently.
-              </p>
-              <span className={styles.heroLocation}>
-                BASED IN LONDON.
-                <br />
-                OPEN TO EVERYWHERE.
-              </span>
-            </div>
-          </section>
-
-          <section
-            id="work"
-            className={styles.work}
-            aria-labelledby="work-title"
-          >
-            <div className={styles.sectionTop}>
-              <h2 id="work-title">
-                Selected work<span>(04)</span>
-              </h2>
-              <div className={styles.filters} aria-label="Filter projects">
-                {["All work", "Branding", "Digital"].map((item) => (
-                  <button
-                    key={item}
-                    aria-pressed={filter === item}
-                    onClick={() => setFilter(item)}
-                  >
-                    {item}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <motion.div layout className={styles.projectGrid}>
-              <AnimatePresence mode="popLayout">
-                {projects
-                  .filter(
-                    (project) =>
-                      filter === "All work" || project.category === filter,
-                  )
-                  .map((project) => (
-                    <motion.article
-                      layout
-                      initial={{ opacity: 0, y: 18 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.97 }}
-                      transition={{ duration: paused ? 0 : 0.45 }}
-                      key={project.slug}
-                      className={styles.project}
-                    >
-                      <button
-                        className={styles.projectButton}
-                        onClick={(event) => {
-                          projectTrigger.current = event.currentTarget;
-                          setSelectedProject(project);
-                        }}
-                        aria-label={`View ${project.name} case study`}
-                      >
-                        <ProjectArt project={project} />
-                        <span className={styles.projectHover}>
-                          Explore project <Arrow diagonal />
-                        </span>
-                      </button>
-                      <div className={styles.projectMeta}>
-                        <div>
-                          <h3>{project.name}</h3>
-                          <p>{project.line}</p>
-                        </div>
-                        <span>
-                          {project.category} <Arrow diagonal />
-                        </span>
-                      </div>
-                    </motion.article>
-                  ))}
-              </AnimatePresence>
-            </motion.div>
-            <div className={styles.workFoot}>
-              <span>A FEW GOOD COLLABORATIONS. A LOT OF POSSIBILITIES.</span>
-              <a href="#services">
-                See what we can do <Arrow diagonal />
-              </a>
-            </div>
-          </section>
-
-          <section
-            id="studio"
-            className={styles.studio}
-            aria-labelledby="studio-title"
-          >
-            <div className={styles.studioIntro}>
-              <span className={styles.eyebrow}>01 / THE STUDIO</span>
-              <Reveal>
-                <h2 id="studio-title">
-                  Small by choice.
-                  <br />
-                  Ambitious by nature<span>.</span>
-                </h2>
-              </Reveal>
-            </div>
-            <div className={styles.studioBody}>
-              <Asterisk className={styles.studioStar} />
-              <div>
-                <p>
-                  Good things happen when different minds come together. We’re
-                  an independent team of strategists, designers, and developers
-                  turning big questions into work that feels unmistakably you.
-                </p>
-                <p className={styles.muted}>
-                  From the first “what if” to the final line of code, we bring
-                  curiosity, care, and a healthy amount of obsession. One
-                  close-knit team. Every part of the picture.
-                </p>
-                <a className={styles.underlinedLink} href="#services">
-                  Meet your next creative partners <Arrow diagonal />
-                </a>
-              </div>
-            </div>
-            <div className={styles.values}>
-              <span>Independent in spirit.</span>
-              <span>Collaborative by default.</span>
-              <span>Built on good chemistry.</span>
-            </div>
-          </section>
-
-          <section
-            id="services"
-            className={styles.services}
-            aria-labelledby="services-title"
-          >
-            <div className={styles.servicesIntro}>
-              <span className={styles.eyebrow}>02 / WHAT WE DO</span>
-              <h2 id="services-title">
-                From the big
-                <br />
-                picture to the
-                <br />
-                <em>little details.</em>
-              </h2>
-              <p>
-                Strategy, identity, and technology.
-                <br />
-                Better when they work together.
-              </p>
-            </div>
-            <div className={styles.serviceList}>
-              {services.map((service, index) => (
-                <div
-                  key={service.title}
-                  className={styles.service}
-                  data-open={openService === index}
-                >
-                  <h3>
-                    <button
-                      onClick={() =>
-                        setOpenService(openService === index ? null : index)
-                      }
-                      aria-expanded={openService === index}
-                      aria-controls={`service-${index}`}
-                    >
-                      <span className={styles.serviceNumber}>0{index + 1}</span>
-                      {service.title}
-                      <span className={styles.servicePlus}>
-                        {openService === index ? "−" : "+"}
-                      </span>
-                    </button>
-                  </h3>
-                  <div
-                    id={`service-${index}`}
-                    className={styles.serviceAnswer}
-                    inert={openService !== index}
-                    aria-hidden={openService !== index}
-                  >
-                    <div>
-                      <p>{service.text}</p>
-                      <span>{service.items}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className={styles.contact} aria-labelledby="contact-title">
-            <div className={styles.contactTop}>
-              <span className={styles.eyebrow}>HAVE SOMETHING IN MIND?</span>
-              <span>
-                <span className={styles.dot} /> GOOD CONVERSATIONS START HERE.
-              </span>
-            </div>
-            <button className={styles.contactHeadline} onClick={openInquiry}>
-              <h2 id="contact-title">
-                Let’s make
-                <br />
-                <span>what’s next.</span>
-              </h2>
-              <span className={styles.contactArrow}>
-                <Arrow diagonal />
-              </span>
-            </button>
-            <div className={styles.contactBottom}>
-              <p>
-                A new brand. A better website. A brave idea.
-                <br />
-                We’d love to hear it.
-              </p>
-              <button className={styles.pill} onClick={openInquiry}>
-                Start a conversation <Arrow diagonal />
-              </button>
-            </div>
-          </section>
-        </main>
-
-        <footer className={styles.footer}>
-          <div className={styles.footerTop}>
-            <a href="#" className={styles.logo} aria-label="Forme back to top">
+          <header className={styles.header}>
+            <a href="#" className={styles.logo} aria-label="Forme home">
               forme<span>®</span>
             </a>
-            <span>
-              GOOD PEOPLE.
+            <span className={styles.headerDescriptor}>
+              INDEPENDENT MINDS.
               <br />
-              GOOD WORK.
+              EXTRAORDINARY POSSIBILITIES.
             </span>
-            <a href="#agency-main">
-              Back to top <span>↑</span>
-            </a>
-          </div>
-          <div className={styles.footerBottom}>
-            <span>© 2026 FORME STUDIO</span>
-            <span>FICTIONAL STUDIO. REAL POSSIBILITIES.</span>
-            <button
-              onClick={() => setMotionPaused(!motionPaused)}
-              disabled={!!reducedMotion}
-              aria-pressed={paused}
-            >
-              {reducedMotion
-                ? "Reduced motion enabled"
-                : motionPaused
-                  ? "Resume motion ↗"
-                  : "Pause motion Ⅱ"}
+            <nav aria-label="Main navigation" className={styles.desktopNav}>
+              <a href="#work">
+                Work <sup>04</sup>
+              </a>
+              <a href="#studio">Studio</a>
+              <a href="#services">Expertise</a>
+            </nav>
+            <button className={styles.headerContact} onClick={openInquiry}>
+              Let’s talk <Arrow diagonal />
             </button>
-          </div>
-        </footer>
-        <ProjectDialog
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-          returnFocus={projectTrigger}
-        />
-        <InquiryDialog
-          open={inquiryOpen}
-          setOpen={setInquiryOpen}
-          returnFocus={inquiryTrigger}
-        />
-      </div>
+            <Dialog.Root open={menuOpen} onOpenChange={setMenuOpen}>
+              <Dialog.Trigger
+                ref={menuTrigger}
+                className={styles.menuButton}
+                aria-label="Open navigation"
+              >
+                <span />
+                <span />
+              </Dialog.Trigger>
+              <Dialog.Portal>
+                <Dialog.Backdrop className={styles.backdrop} />
+                <Dialog.Popup
+                  className={`${styles.dialog} ${styles.mobileMenu}`}
+                  data-lenis-prevent
+                >
+                  <div className={styles.dialogTop}>
+                    <Dialog.Title>forme®</Dialog.Title>
+                    <Dialog.Close
+                      className={styles.close}
+                      aria-label="Close navigation"
+                    >
+                      ×
+                    </Dialog.Close>
+                  </div>
+                  <nav aria-label="Mobile navigation">
+                    {[
+                      ["Work", "work"],
+                      ["Studio", "studio"],
+                      ["Expertise", "services"],
+                    ].map(([label, id]) => (
+                      <a
+                        key={id}
+                        href={`#${id}`}
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {label}
+                        <Arrow diagonal />
+                      </a>
+                    ))}
+                  </nav>
+                  <button
+                    className={styles.pill}
+                    onClick={() => {
+                      inquiryTrigger.current = menuTrigger.current;
+                      setMenuOpen(false);
+                      setInquiryOpen(true);
+                    }}
+                  >
+                    Let’s talk <Arrow diagonal />
+                  </button>
+                </Dialog.Popup>
+              </Dialog.Portal>
+            </Dialog.Root>
+          </header>
+
+          <main id="agency-main">
+            <section
+              ref={heroRef}
+              className={styles.hero}
+              aria-labelledby="hero-title"
+            >
+              <div className={styles.heroEyebrow}>
+                <span className={styles.dot} /> A BRAND & DIGITAL DESIGN STUDIO
+              </div>
+              <h1 id="hero-title" className={styles.heroTitle}>
+                <span>
+                  <ScrollLayer
+                    as="span"
+                    className={styles.headlineShift}
+                    progress={heroProgress}
+                    x={[0, -42]}
+                    y={[0, 24]}
+                    testId="hero-line-one"
+                  >
+                    Different
+                  </ScrollLayer>
+                </span>
+                <span>
+                  <ScrollLayer
+                    as="span"
+                    className={styles.headlineShift}
+                    progress={heroProgress}
+                    x={[0, 48]}
+                    y={[0, 14]}
+                    testId="hero-line-two"
+                  >
+                    by design<span className={styles.orangePeriod}>.</span>
+                  </ScrollLayer>
+                </span>
+              </h1>
+              <div className={styles.sculptureWrap}>
+                <ScrollLayer
+                  progress={heroProgress}
+                  className={styles.sculptureTravel}
+                  x={[0, -60]}
+                  y={[0, 115]}
+                  rotate={[0, 14]}
+                  scale={[1, 0.84]}
+                  testId="hero-sculpture-travel"
+                >
+                  <AgencySculpture progress={heroProgress} />
+                </ScrollLayer>
+                <span className={styles.sculptureCaption}>
+                  A NEW PERSPECTIVE, ALWAYS. ↗
+                </span>
+              </div>
+              <div className={styles.heroBottom}>
+                <a
+                  href="#work"
+                  className={styles.roundLink}
+                  aria-label="Explore selected work"
+                >
+                  <Arrow />
+                </a>
+                <p>
+                  We shape brands and build digital experiences
+                  <br className={styles.desktopBreak} /> for people ready to do
+                  things differently.
+                </p>
+                <span className={styles.heroLocation}>
+                  BASED IN LONDON.
+                  <br />
+                  OPEN TO EVERYWHERE.
+                </span>
+              </div>
+            </section>
+
+            <section
+              id="work"
+              className={styles.work}
+              aria-labelledby="work-title"
+            >
+              <div className={styles.sectionTop}>
+                <h2 id="work-title">
+                  Selected work<span>(04)</span>
+                </h2>
+                <div className={styles.filters} aria-label="Filter projects">
+                  {["All work", "Branding", "Digital"].map((item) => (
+                    <button
+                      key={item}
+                      aria-pressed={filter === item}
+                      onClick={() => setFilter(item)}
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <motion.div layout className={styles.projectGrid}>
+                <AnimatePresence mode="popLayout">
+                  {projects
+                    .filter(
+                      (project) =>
+                        filter === "All work" || project.category === filter,
+                    )
+                    .map((project, index) => (
+                      <motion.article
+                        layout
+                        initial={{ opacity: 0, y: 18 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.97 }}
+                        transition={{ duration: paused ? 0 : 0.45 }}
+                        key={project.slug}
+                        className={styles.project}
+                      >
+                        <ProjectParallax index={index}>
+                          <button
+                            className={styles.projectButton}
+                            onClick={(event) => {
+                              projectTrigger.current = event.currentTarget;
+                              setSelectedProject(project);
+                            }}
+                            aria-label={`View ${project.name} case study`}
+                          >
+                            <ProjectArt project={project} animated />
+                            <span className={styles.projectHover}>
+                              Explore project <Arrow diagonal />
+                            </span>
+                          </button>
+                          <div className={styles.projectMeta}>
+                            <div>
+                              <h3>{project.name}</h3>
+                              <p>{project.line}</p>
+                            </div>
+                            <span>
+                              {project.category} <Arrow diagonal />
+                            </span>
+                          </div>
+                        </ProjectParallax>
+                      </motion.article>
+                    ))}
+                </AnimatePresence>
+              </motion.div>
+              <div className={styles.workFoot}>
+                <span>A FEW GOOD COLLABORATIONS. A LOT OF POSSIBILITIES.</span>
+                <a href="#services">
+                  See what we can do <Arrow diagonal />
+                </a>
+              </div>
+            </section>
+
+            <section
+              id="studio"
+              ref={studioRef}
+              className={styles.studio}
+              aria-labelledby="studio-title"
+            >
+              <div className={styles.studioIntro}>
+                <span className={styles.eyebrow}>01 / THE STUDIO</span>
+                <ScrollReveal distance={65}>
+                  <h2 id="studio-title">
+                    Small by choice.
+                    <br />
+                    Ambitious by nature<span>.</span>
+                  </h2>
+                </ScrollReveal>
+              </div>
+              <div className={styles.studioBody}>
+                <div className={styles.studioSculpture}>
+                  <ScrollLayer
+                    progress={studioProgress}
+                    className={styles.sculptureTravel}
+                    y={[65, -65]}
+                    rotate={[-12, 12]}
+                    testId="studio-sculpture-travel"
+                  >
+                    <AgencySculpture
+                      progress={studioProgress}
+                      variant="studio"
+                    />
+                  </ScrollLayer>
+                  <span className={styles.studioSculptureCaption}>
+                    DIFFERENT MINDS. ONE ORBIT.
+                  </span>
+                </div>
+                <div>
+                  <p>
+                    Good things happen when different minds come together. We’re
+                    an independent team of strategists, designers, and
+                    developers turning big questions into work that feels
+                    unmistakably you.
+                  </p>
+                  <p className={styles.muted}>
+                    From the first “what if” to the final line of code, we bring
+                    curiosity, care, and a healthy amount of obsession. One
+                    close-knit team. Every part of the picture.
+                  </p>
+                  <a className={styles.underlinedLink} href="#services">
+                    Meet your next creative partners <Arrow diagonal />
+                  </a>
+                </div>
+              </div>
+              <div className={styles.values}>
+                <span>Independent in spirit.</span>
+                <span>Collaborative by default.</span>
+                <span>Built on good chemistry.</span>
+              </div>
+            </section>
+
+            <section
+              id="services"
+              className={styles.services}
+              aria-labelledby="services-title"
+            >
+              <ScrollReveal className={styles.servicesIntro} distance={55}>
+                <span className={styles.eyebrow}>02 / WHAT WE DO</span>
+                <h2 id="services-title">
+                  From the big
+                  <br />
+                  picture to the
+                  <br />
+                  <em>little details.</em>
+                </h2>
+                <p>
+                  Strategy, identity, and technology.
+                  <br />
+                  Better when they work together.
+                </p>
+              </ScrollReveal>
+              <div className={styles.serviceList}>
+                {services.map((service, index) => (
+                  <div
+                    key={service.title}
+                    className={styles.service}
+                    data-open={openService === index}
+                  >
+                    <h3>
+                      <button
+                        onClick={() =>
+                          setOpenService(openService === index ? null : index)
+                        }
+                        aria-expanded={openService === index}
+                        aria-controls={`service-${index}`}
+                      >
+                        <span className={styles.serviceNumber}>
+                          0{index + 1}
+                        </span>
+                        {service.title}
+                        <span className={styles.servicePlus}>
+                          {openService === index ? "−" : "+"}
+                        </span>
+                      </button>
+                    </h3>
+                    <div
+                      id={`service-${index}`}
+                      className={styles.serviceAnswer}
+                      inert={openService !== index}
+                      aria-hidden={openService !== index}
+                    >
+                      <div>
+                        <p>{service.text}</p>
+                        <span>{service.items}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section
+              ref={contactRef}
+              className={styles.contact}
+              aria-labelledby="contact-title"
+            >
+              <div className={styles.contactTop}>
+                <span className={styles.eyebrow}>HAVE SOMETHING IN MIND?</span>
+                <span>
+                  <span className={styles.dot} /> GOOD CONVERSATIONS START HERE.
+                </span>
+              </div>
+              <ScrollLayer
+                progress={contactProgress}
+                y={[70, 0]}
+                x={[-30, 0]}
+                testId="contact-scroll-layer"
+              >
+                <button
+                  className={styles.contactHeadline}
+                  onClick={openInquiry}
+                >
+                  <h2 id="contact-title">
+                    Let’s make
+                    <br />
+                    <span>what’s next.</span>
+                  </h2>
+                  <span className={styles.contactArrow}>
+                    <Arrow diagonal />
+                  </span>
+                </button>
+              </ScrollLayer>
+              <div className={styles.contactBottom}>
+                <p>
+                  A new brand. A better website. A brave idea.
+                  <br />
+                  We’d love to hear it.
+                </p>
+                <button className={styles.pill} onClick={openInquiry}>
+                  Start a conversation <Arrow diagonal />
+                </button>
+              </div>
+            </section>
+          </main>
+
+          <footer className={styles.footer}>
+            <div className={styles.footerTop}>
+              <a
+                href="#"
+                className={styles.logo}
+                aria-label="Forme back to top"
+              >
+                forme<span>®</span>
+              </a>
+              <span>
+                GOOD PEOPLE.
+                <br />
+                GOOD WORK.
+              </span>
+              <a href="#agency-main">
+                Back to top <span>↑</span>
+              </a>
+            </div>
+            <div className={styles.footerBottom}>
+              <span>© 2026 FORME STUDIO</span>
+              <span>FICTIONAL STUDIO. REAL POSSIBILITIES.</span>
+              <button
+                onClick={() => setMotionPaused(!motionPaused)}
+                disabled={!!reducedMotion}
+                aria-pressed={paused}
+              >
+                {reducedMotion
+                  ? "Reduced motion enabled"
+                  : motionPaused
+                    ? "Resume motion ↗"
+                    : "Pause motion Ⅱ"}
+              </button>
+            </div>
+          </footer>
+          <ProjectDialog
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+            returnFocus={projectTrigger}
+          />
+          <InquiryDialog
+            open={inquiryOpen}
+            setOpen={setInquiryOpen}
+            returnFocus={inquiryTrigger}
+          />
+        </div>
+      </AgencyMotion>
     </MotionConfig>
   );
 }

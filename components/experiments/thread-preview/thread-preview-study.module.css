@@ -327,12 +327,7 @@
   min-height: 48px;
   cursor: pointer;
 }
-.controls input {
-  width: 15px;
-  height: 15px;
-  accent-color: #0072ce;
-}
-.controls label:has(:disabled) {
+.controls label:has([data-disabled]) {
   cursor: default;
 }
 @media (max-width: 1050px) {
